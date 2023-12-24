@@ -2,7 +2,8 @@ name: Build
 
 on:
   push:
-    branches: [ "master" ]
+    tags:
+      - '*'
 
 jobs:
 
@@ -42,7 +43,7 @@ jobs:
           - name: "29.1"
             tarball: "https://ftp.gnu.org/gnu/emacs/emacs-29.1.tar.gz"
             tarball_dir: "emacs-29.1"
-          - name: "29.1-native-json-rpc"
+          - name: "29.1_native_json_rpc"
             repo: "blahgeek/emacs"
             commit: "b8e9c30dcae19eaa8deed9bd594e84d5cf6244cb"
         build_with_x11: [ "yes", "no" ]
@@ -82,3 +83,10 @@ jobs:
     - name: Run and package
       run: ./run-and-package.sh builder-image:latest ./emacs-src BUILD_WITH_X11=${{ matrix.build_with_x11 }} BUILD_RUN_AUTOGEN=${{ matrix.source.repo && 'yes' || 'no' }}
 
+    - name: Upload binary to release
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: dist/Emacs.AppImage
+        asset_name: Emacs-${{ matrix.source.name }}-${{ matrix.build_with_x11 == 'yes' && 'x11' || 'nox' }}.AppImage
+        tag: ${{ github.ref }}
