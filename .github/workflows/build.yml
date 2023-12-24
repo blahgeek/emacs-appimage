@@ -12,8 +12,10 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
+
     - name: Build and export
       uses: docker/build-push-action@v5
       with:
@@ -22,25 +24,37 @@ jobs:
         cache-to: type=gha,mode=max
         tags: builder-image:latest
         outputs: type=docker,dest=/tmp/builder-image.tar
+
     - name: Upload artifact
       uses: actions/upload-artifact@v3
       with:
         name: builder-image
         path: /tmp/builder-image.tar
 
-  build-29:
+
+  build-emacs:
     runs-on: ubuntu-latest
     needs: prepare-docker
 
     steps:
+    - name: Install fuse
+      run: sudo apt-get install -y fuse libfuse2
+
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Download emacs source
+      run: curl -L https://ftp.gnu.org/gnu/emacs/emacs-29.1.tar.xz | tar xz
+
     - name: Download artifact
       uses: actions/download-artifact@v2
       with:
         name: builder-image
         path: /tmp/builder-image.tar
+
     - name: Load image
       run: docker load -i /tmp/builder-image.tar
-    - name: Download emacs source
-      run: curl -L https://ftp.gnu.org/gnu/emacs/emacs-29.1.tar.xz | tar xz
-    # - name: Run image
-    #   run: docker run --name emacs-builder --rm builder-image:latest
+
+    - name: Run and package
+      run: ./run-and-package.sh builder-image:latest ./emacs-29.1 BUILD_WITH_X11=yes
+
