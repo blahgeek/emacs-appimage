@@ -52,7 +52,7 @@ jobs:
               {"name": "master", "repo": "emacs-mirror/emacs", ref: "master" }
             '
           fi
-          echo ::set-output name=sources::[$SOURCES]
+          echo sources=[$SOURCES] >> $GITHUB_OUTPUT
     outputs:
       sources: ${{ steps.setup-matrix-sources.outputs.sources }}
 
