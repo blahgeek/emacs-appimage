@@ -38,7 +38,11 @@ env \
 env \
     PATH=$DIST_APPDIR/bin:$PATH \
     LD_LIBRARY_PATH=$DIST_APPDIR/lib \
-    make install-strip -j$(nproc)
+    make -j$(nproc)
+env \
+    PATH=$DIST_APPDIR/bin:$PATH \
+    LD_LIBRARY_PATH=$DIST_APPDIR/lib \
+    make install-strip
 popd
 
 cp $SCRIPT_DIR/AppRun $DIST_APPDIR/AppRun
