@@ -1,3 +1,4 @@
 dist/
 *.AppImage
 notes.md
+build/

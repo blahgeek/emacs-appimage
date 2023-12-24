@@ -1,11 +1,25 @@
 #!/bin/bash -ex
 
 cd "$(dirname "$(readlink -f "${0}")")"
-rm -rf ./dist
+rm -rf ./dist ./build
+
+mkdir build
+pushd build
+wget https://ftp.gnu.org/gnu/emacs/emacs-29.1.tar.xz
+tar xf emacs-29.1.tar.xz
+mv emacs-29.1 emacs-src
+popd
 
 docker build .  # next step has no log, so build first
 IMAGE_ID=$(docker build -q .)
-CONTAINER_ID=$(docker create $IMAGE_ID)
+
+CONTAINER_ID="emacs-appimage-build-$$-$(date +%s)"
+docker run \
+       --name "$CONTAINER_ID" \
+       -v $PWD/build/emacs-src:/work/emacs-src \
+       $IMAGE_ID \
+       scripts/build_emacs_in_docker.sh
+
 docker cp $CONTAINER_ID:/work/dist ./dist
 docker rm -v $CONTAINER_ID
 

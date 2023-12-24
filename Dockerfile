@@ -46,28 +46,6 @@ RUN apt-get install -y \
     libsqlite3-dev libmagickcore-dev libmagickwand-dev \
     libwebp-dev libotf-dev libcairo-dev libjansson-dev \
     libgnutls28-dev libxpm-dev libncurses-dev
+RUN apt-get install -y git texinfo
 
-# build emacs
-RUN wget https://ftp.gnu.org/gnu/emacs/emacs-29.1.tar.xz && \
-    tar xf emacs-29.1.tar.xz
-
-RUN cd emacs-29.1 && \
-    PATH=$DIST_APPDIR/bin:$PATH LD_LIBRARY_PATH=$DIST_APPDIR/lib LDFLAGS=-L$DIST_APPDIR/lib CPPFLAGS=-I$DIST_APPDIR/include \
-    TREE_SITTER_CFLAGS=-I$DIST_APPDIR/include TREE_SITTER_LIBS="-L$DIST_APPDIR/lib/ -ltree-sitter" \
-    CC=gcc-8 \
-    ./configure \
-    --prefix=$DIST_APPDIR \
-    --with-native-compilation=aot --disable-locallisppath \
-    --with-x --without-pgtk --without-gconf --with-x-toolkit=gtk3 \
-    --with-gif --with-jpeg --with-png --with-rsvg --with-tiff --with-imagemagick --with-webp \
-    --with-dbus --with-modules --with-libgmp --with-gpm --with-json \
-    --with-lcms2 --with-xml2 --with-sqlite3 --with-threads --with-tree-sitter \
-    --with-xft --with-cairo --with-harfbuzz --with-libotf \
-    --without-m17n-flt \
-    --with-imagemagick && \
-    PATH=$DIST_APPDIR/bin:$PATH LD_LIBRARY_PATH=$DIST_APPDIR/lib make install-strip -j$(nproc)
-
-ADD resources/AppRun $DIST_APPDIR/AppRun
-
-ADD postprocess.py $WORK_DIR/postprocess.py
-RUN python3 postprocess.py $DIST_APPDIR
+ADD scripts /work/scripts
