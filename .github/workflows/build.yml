@@ -30,6 +30,7 @@ jobs:
       with:
         name: builder-image
         path: /tmp/builder-image.tar
+        compression-level: 0
 
 
   build-emacs:
