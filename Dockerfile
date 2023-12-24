@@ -18,7 +18,7 @@ RUN wget https://ftp.gnu.org/gnu/gcc/gcc-13.2.0/gcc-13.2.0.tar.xz && \
     ./configure --prefix=$DIST_APPDIR \
     --enable-host-shared --enable-languages=jit,c++ \
     --disable-multilib --enable-checking=release --enable-bootstrap && \
-    make -j10 && \
+    make -j$(nproc) && \
     make install-strip && \
     cd .. && rm -rf gcc-13.2.0 gcc-13.2.0.tar.xz
 
@@ -28,7 +28,7 @@ RUN wget http://ftp.gnu.org/gnu/binutils/binutils-2.41.tar.gz && \
     tar xf binutils-2.41.tar.gz && \
     cd binutils-2.41 && \
     ./configure --prefix=/usr/local/ --enable-static --enable-static-link && \
-    make -j10 && \
+    make -j$(nproc) && \
     make install-strip && \
     cd .. && rm -rf binutils-2.41 binutils-2.41.tar.gz
 
@@ -37,7 +37,7 @@ RUN wget https://github.com/tree-sitter/tree-sitter/archive/refs/tags/v0.20.8.ta
     tar xf v0.20.8.tar.gz
 
 RUN cd tree-sitter-0.20.8 && \
-    make -j10 CC=gcc-8 && \
+    make -j$(nproc) CC=gcc-8 && \
     make install PREFIX=$DIST_APPDIR
 
 RUN apt-get install -y \
@@ -65,7 +65,7 @@ RUN cd emacs-29.1 && \
     --with-xft --with-cairo --with-harfbuzz --with-libotf \
     --without-m17n-flt \
     --with-imagemagick && \
-    PATH=$DIST_APPDIR/bin:$PATH LD_LIBRARY_PATH=$DIST_APPDIR/lib make install-strip -j10
+    PATH=$DIST_APPDIR/bin:$PATH LD_LIBRARY_PATH=$DIST_APPDIR/lib make install-strip -j$(nproc)
 
 ADD resources/AppRun $DIST_APPDIR/AppRun
 
