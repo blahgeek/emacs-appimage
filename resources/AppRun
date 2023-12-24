@@ -1,0 +1,21 @@
+#!/bin/bash
+
+cd "$(dirname "$(readlink -f "$0")")"
+
+VERSION=$(readlink bin/emacs | sed -e 's/emacs-//')
+
+export EMACSLOADPATH="$PWD/share/emacs/$VERSION/lisp"
+export EMACSDATA="$PWD/share/emacs/$VERSION/etc"
+export EMACSDOC="$PWD/share/emacs/$VERSION/etc"
+export EMACSPATH="$PWD/libexec/emacs/$VERSION/x86_64-pc-linux-gnu"
+export PATH="$PATH:$PWD/bin"
+
+# check --emacs-appimage-run-as argument
+if [ "$1" = "--emacs-appimage-run-as" ]; then
+    shift
+    CMD="$1"
+    shift
+    exec "./bin/$CMD" "$@"
+fi
+
+exec ./bin/emacs "$@"
