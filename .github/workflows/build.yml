@@ -36,6 +36,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: prepare-docker
 
+    strategy:
+      matrix:
+        source:
+          - "{\"name\": \"29.1\", \"tarball\": \"https://ftp.gnu.org/gnu/emacs/emacs-29.1.tar.gz\", \"tarball_dir\": \"emacs-29.1\" }"
+        build_with_x11: [ "yes", "no" ]
+
     steps:
     - name: Install fuse
       run: sudo apt-get install -y fuse libfuse2
@@ -43,8 +49,10 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Download emacs source
-      run: curl -L https://ftp.gnu.org/gnu/emacs/emacs-29.1.tar.xz | tar xz
+    - name: Download emacs source from tarball
+      run: |
+        curl -L ${{ fromJSON(matrix.source).tarball }} | tar xz
+        mv ${{ fromJSON(matrix.source).tarball_dir }} emacs-src
 
     - name: Download artifact
       uses: actions/download-artifact@v2
@@ -58,5 +66,5 @@ jobs:
         docker image ls -a
 
     - name: Run and package
-      run: ./run-and-package.sh builder-image:latest ./emacs-29.1 BUILD_WITH_X11=yes
+      run: ./run-and-package.sh builder-image:latest ./emacs-src BUILD_WITH_X11=${{ matrix.build_with_x11 }}
 
