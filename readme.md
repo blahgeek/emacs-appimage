@@ -21,7 +21,7 @@ add `--emacs-appimage-run-as BINARY_NAME` as the first arguments, aka: `./Emacs.
 
 ## Prerequisite
 
-- A not-too-old linux system (at least ~ ubuntu 18.04, which is the system it's based on)
+- A not-too-old linux system (at least ~ ubuntu 18.04, which is the system it's built on)
 - Fuse (Should be pre-installed in most distributions. see [here](https://docs.appimage.org/user-guide/troubleshooting/index.html#ref-ug-troubleshooting))
 
 Tested in:

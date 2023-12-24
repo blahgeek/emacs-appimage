@@ -40,6 +40,7 @@ jobs:
       matrix:
         source:
           - "{\"name\": \"29.1\", \"tarball\": \"https://ftp.gnu.org/gnu/emacs/emacs-29.1.tar.gz\", \"tarball_dir\": \"emacs-29.1\" }"
+          - "{\"name\": \"29.1-native-json-rpc\", \"repo\": \"blahgeek/emacs\", \"commit\": \"b8e9c30dcae19eaa8deed9bd594e84d5cf6244cb\" }"
         build_with_x11: [ "yes", "no" ]
 
     steps:
@@ -53,6 +54,15 @@ jobs:
       run: |
         curl -L ${{ fromJSON(matrix.source).tarball }} | tar xz
         mv ${{ fromJSON(matrix.source).tarball_dir }} emacs-src
+      if: ${{ fromJSON(matrix.source).tarball }}
+
+    - name: Download emacs source from repo
+      uses: actions/checkout@v4
+      with:
+        repository: ${{ fromJSON(matrix.source).repo }}
+        ref: ${{ fromJSON(matrix.source).commit }}
+        path: emacs-src
+      if: ${{ fromJSON(matrix.source).repo }}
 
     - name: Download artifact
       uses: actions/download-artifact@v2
@@ -66,5 +76,5 @@ jobs:
         docker image ls -a
 
     - name: Run and package
-      run: ./run-and-package.sh builder-image:latest ./emacs-src BUILD_WITH_X11=${{ matrix.build_with_x11 }}
+      run: ./run-and-package.sh builder-image:latest ./emacs-src BUILD_WITH_X11=${{ matrix.build_with_x11 }} BUILD_RUN_AUTOGEN=${{ fromJSON(matrix.source).repo && "yes" || "no" }}
 
