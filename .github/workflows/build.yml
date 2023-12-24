@@ -101,4 +101,7 @@ jobs:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: dist/Emacs.AppImage
         asset_name: Emacs-${{ matrix.source.name }}-${{ matrix.build_with_x11 == 'yes' && 'x11' || 'nox' }}.AppImage
-        tag: ${{ github.ref }}
+        tag: ${{ github.event_name == 'schedule' && 'daily-master-build' || github.ref }}
+        prerelease: ${{ github.event_name == 'schedule' }}
+        overwrite: ${{ github.event_name == 'schedule' }}
+        make_latest: ${{ github.event_name != 'schedule' }}
