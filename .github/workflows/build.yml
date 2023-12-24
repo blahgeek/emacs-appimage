@@ -76,5 +76,5 @@ jobs:
         docker image ls -a
 
     - name: Run and package
-      run: ./run-and-package.sh builder-image:latest ./emacs-src BUILD_WITH_X11=${{ matrix.build_with_x11 }} BUILD_RUN_AUTOGEN=${{ fromJSON(matrix.source).repo && "yes" || "no" }}
+      run: ./run-and-package.sh builder-image:latest ./emacs-src BUILD_WITH_X11=${{ matrix.build_with_x11 }} BUILD_RUN_AUTOGEN=${{ fromJSON(matrix.source).repo && 'yes' || 'no' }}
 
