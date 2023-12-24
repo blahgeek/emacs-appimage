@@ -8,9 +8,7 @@ cp -r emacs-src emacs
 
 pushd emacs
 
-if [ "$BUILD_RUN_AUTOGEN" = "yes" ]; then
-    ./autogen.sh
-fi
+./autogen.sh
 
 ARGS=""
 ARGS+=" --disable-locallisppath"
@@ -38,11 +36,7 @@ env \
 env \
     PATH=$DIST_APPDIR/bin:$PATH \
     LD_LIBRARY_PATH=$DIST_APPDIR/lib \
-    make -j$(nproc)
-env \
-    PATH=$DIST_APPDIR/bin:$PATH \
-    LD_LIBRARY_PATH=$DIST_APPDIR/lib \
-    make install-strip
+    bash -c "make -j$(nproc) && make install"
 popd
 
 cp $SCRIPT_DIR/AppRun $DIST_APPDIR/AppRun

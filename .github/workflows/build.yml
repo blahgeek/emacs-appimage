@@ -44,11 +44,11 @@ jobs:
       matrix:
         source:
           - name: "29.1"
-            tarball: "https://ftp.gnu.org/gnu/emacs/emacs-29.1.tar.gz"
-            tarball_dir: "emacs-29.1"
+            repo: "emacs-mirror/emacs"
+            ref: "emacs-29.1"
           - name: "29.1_native_json_rpc"
             repo: "blahgeek/emacs"
-            commit: "b8e9c30dcae19eaa8deed9bd594e84d5cf6244cb"
+            ref: "b8e9c30dcae19eaa8deed9bd594e84d5cf6244cb"
         build_with_x11: [ "yes", "no" ]
 
     steps:
@@ -58,19 +58,12 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Download emacs source from tarball
-      run: |
-        curl -L ${{ matrix.source.tarball }} | tar xz
-        mv ${{ matrix.source.tarball_dir }} emacs-src
-      if: ${{ matrix.source.tarball }}
-
     - name: Download emacs source from repo
       uses: actions/checkout@v4
       with:
         repository: ${{ matrix.source.repo }}
-        ref: ${{ matrix.source.commit }}
+        ref: ${{ matrix.source.ref }}
         path: emacs-src
-      if: ${{ matrix.source.repo }}
 
     - name: Download artifact
       uses: actions/download-artifact@v2
@@ -84,7 +77,7 @@ jobs:
         docker image ls -a
 
     - name: Run and package
-      run: ./run-and-package.sh builder-image:latest ./emacs-src BUILD_WITH_X11=${{ matrix.build_with_x11 }} BUILD_RUN_AUTOGEN=${{ matrix.source.repo && 'yes' || 'no' }}
+      run: ./run-and-package.sh builder-image:latest ./emacs-src BUILD_WITH_X11=${{ matrix.build_with_x11 }}
 
     - name: Upload binary to release
       uses: svenstaro/upload-release-action@v2
