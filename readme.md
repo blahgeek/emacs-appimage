@@ -8,6 +8,7 @@ This repo builds Emacs as AppImages for x86-64 linux systems.
 - Supports native-comp, native json, tree sitter
 - Self-contained, no extra dependencies
 - Automatically built on Github Actions
+- Provides both latest release and daily master builds
 
 ## How-to
 
@@ -23,7 +24,9 @@ add `--emacs-appimage-run-as BINARY_NAME` as the first arguments, aka: `./Emacs.
 ## Prerequisite
 
 - A not-too-old linux system (at least ~ ubuntu 18.04, which is the system it's built on)
-- Fuse (Should be pre-installed in most distributions. see [here](https://docs.appimage.org/user-guide/troubleshooting/index.html#ref-ug-troubleshooting))
+- FUSE 2.x, which should be pre-installed in most distributions.
+  - Recent distributions (e.g. ubuntu 22.04+) may have FUSE 3.x installed instead, you need to also install the 2.x version.
+  - For more help, see [here](https://docs.appimage.org/user-guide/troubleshooting/fuse.html#setting-up-fuse-2-x-alongside-of-fuse-3-x-on-recent-ubuntu-22-04-debian-and-their-derivatives)
 
 Tested in:
 
