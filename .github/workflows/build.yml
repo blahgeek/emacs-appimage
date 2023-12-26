@@ -37,11 +37,11 @@ jobs:
         name: builder-image
         path: /tmp/builder-image.tar
 
-  setup-matrix-sources:
+  setup-vars:
     runs-on: ubuntu-latest
     steps:
       - name: Setup matrix source
-        id: setup-matrix-sources
+        id: setup-vars
         run: |
           SOURCES='
             {"name": "29.1", "repo": "emacs-mirror/emacs", ref: "emacs-29.1" },
@@ -53,18 +53,20 @@ jobs:
             '
           fi
           echo sources=[$SOURCES] >> $GITHUB_OUTPUT
+          echo datetimestr=$(date +%Y%m%d-%H%M) >> $GITHUB_OUTPUT
     outputs:
-      sources: ${{ steps.setup-matrix-sources.outputs.sources }}
+      sources: ${{ steps.setup-vars.outputs.sources }}
+      datetimestr: ${{ steps.setup-vars.outputs.datetimestr }}
 
   build-emacs:
     runs-on: ubuntu-latest
     needs:
       - prepare-docker
-      - setup-matrix-sources
+      - setup-vars
 
     strategy:
       matrix:
-        source: ${{ fromJson(needs.setup-matrix-sources.outputs.sources) }}
+        source: ${{ fromJson(needs.setup-vars.outputs.sources) }}
         build_with_x11: [ "yes", "no" ]
 
     steps:
@@ -101,7 +103,7 @@ jobs:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: dist/Emacs.AppImage
         asset_name: Emacs-${{ matrix.source.name }}-${{ matrix.build_with_x11 == 'yes' && 'x11' || 'nox' }}.AppImage
-        tag: ${{ github.event_name == 'schedule' && 'daily-master-build' || github.ref }}
+        tag: ${{ github.event_name == 'schedule' && format('daily-master-build-{0}', needs.setup-vars.outputs.datetimestr) || github.ref }}
+        release_name: "${{ github.event_name == 'schedule' && 'Daily master build' || 'Release build' }} ${{ needs.setup-vars.outputs.datetimestr }}"
         prerelease: ${{ github.event_name == 'schedule' }}
-        overwrite: ${{ github.event_name == 'schedule' }}
         make_latest: ${{ github.event_name != 'schedule' }}
