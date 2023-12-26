@@ -1,4 +1,5 @@
 name: Build
+run-name: "${{ github.event_name == 'schedule' && 'Daily master build' || format('Release build for {0}', github.ref) }}"
 
 permissions:
   contents: write
