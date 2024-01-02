@@ -1,25 +1,21 @@
 #!/bin/bash
 
-cd "$(dirname "$(readlink -f "$0")")"
+APPIMAGE_ROOT="$(dirname "$(readlink -f "$0")")"
 
-VERSION=$(readlink bin/emacs | sed -e 's/emacs-//')
+VERSION=$(readlink "$APPIMAGE_ROOT/bin/emacs" | sed -e 's/emacs-//')
 
-export EMACSLOADPATH="$PWD/share/emacs/$VERSION/lisp"
-export EMACSDATA="$PWD/share/emacs/$VERSION/etc"
-export EMACSDOC="$PWD/share/emacs/$VERSION/etc"
-export EMACSPATH="$PWD/libexec/emacs/$VERSION/x86_64-pc-linux-gnu"
-export PATH="$PATH:$PWD/bin"
-
-CWD="$PWD"
-
-cd
+export EMACSLOADPATH="$APPIMAGE_ROOT/share/emacs/$VERSION/lisp"
+export EMACSDATA="$APPIMAGE_ROOT/share/emacs/$VERSION/etc"
+export EMACSDOC="$APPIMAGE_ROOT/share/emacs/$VERSION/etc"
+export EMACSPATH="$APPIMAGE_ROOT/libexec/emacs/$VERSION/x86_64-pc-linux-gnu"
+export PATH="$APPIMAGE_ROOT/bin:$PATH"
 
 # check --emacs-appimage-run-as argument
 if [ "$1" = "--emacs-appimage-run-as" ]; then
     shift
     CMD="$1"
     shift
-    exec "$CWD/bin/$CMD" "$@"
+    exec "$APPIMAGE_ROOT/bin/$CMD" "$@"
 fi
 
-exec "$CWD/bin/emacs" "$@"
+exec "$APPIMAGE_ROOT/bin/emacs" "$@"
