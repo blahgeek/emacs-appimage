@@ -46,7 +46,7 @@ jobs:
         run: |
           SOURCES='
             {"name": "29.1", "repo": "emacs-mirror/emacs", ref: "emacs-29.1" },
-            {"name": "29.1_native_json_rpc", "repo": "blahgeek/emacs", ref: "b8e9c30dcae19eaa8deed9bd594e84d5cf6244cb" }
+            {"name": "29.2", "repo": "emacs-mirror/emacs", ref: "emacs-29.2" },
           '
           if [ $GITHUB_EVENT_NAME = "schedule" ]; then
             SOURCES='

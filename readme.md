@@ -37,4 +37,3 @@ Tested in:
 
 - `x11`: built with X11 GUI support
 - `nox`: built without GUI support
-- `native_json_rpc`: contains the [native json rpc](https://github.com/emacs-lsp/emacs) patch
