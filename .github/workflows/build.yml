@@ -108,3 +108,4 @@ jobs:
         release_name: "${{ github.event_name == 'schedule' && 'Daily master build' || 'Release build' }} ${{ needs.setup-vars.outputs.datetimestr }}"
         prerelease: ${{ github.event_name == 'schedule' }}
         make_latest: ${{ github.event_name != 'schedule' }}
+        body: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
