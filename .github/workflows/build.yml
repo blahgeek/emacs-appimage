@@ -85,7 +85,7 @@ jobs:
         path: emacs-src
 
     - name: Download artifact
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: builder-image
         path: /tmp
