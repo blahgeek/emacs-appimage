@@ -102,7 +102,7 @@ jobs:
 
     - name: Upload binary to release
       uses: svenstaro/upload-release-action@v2
-      if: ${{ !startsWith(github.ref, 'dev-') }}
+      if: ${{ !contains(github.ref, 'dev-') }}
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: dist/Emacs.AppImage
