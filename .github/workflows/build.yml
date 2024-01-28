@@ -8,6 +8,8 @@ on:
   push:
     tags:
       - '*'
+    branches:
+      - 'dev-*'
   schedule:
     - cron: '0 0 * * *'
 
@@ -68,7 +70,7 @@ jobs:
     strategy:
       matrix:
         source: ${{ fromJson(needs.setup-vars.outputs.sources) }}
-        build_with_x11: [ "yes", "no" ]
+        build_gui: [ "x11", "pgtk", "no" ]
 
     steps:
     - name: Install fuse
@@ -96,14 +98,15 @@ jobs:
         docker image ls -a
 
     - name: Run and package
-      run: ./run-and-package.sh builder-image:latest ./emacs-src BUILD_WITH_X11=${{ matrix.build_with_x11 }}
+      run: ./run-and-package.sh builder-image:latest ./emacs-src BUILD_GUI=${{ matrix.build_gui }}
 
     - name: Upload binary to release
       uses: svenstaro/upload-release-action@v2
+      if: ${{ !contains(github.ref, 'dev-') }}
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: dist/Emacs.AppImage
-        asset_name: Emacs-${{ matrix.source.name }}-${{ matrix.build_with_x11 == 'yes' && 'x11' || 'nox' }}.AppImage
+        asset_name: Emacs-${{ matrix.source.name }}-${{ matrix.build_gui == 'no' && 'nox' || matrix.build_gui }}.AppImage
         tag: ${{ github.event_name == 'schedule' && format('daily-master-build-{0}', needs.setup-vars.outputs.datetimestr) || github.ref }}
         release_name: "${{ github.event_name == 'schedule' && 'Daily master build' || 'Release build' }} ${{ needs.setup-vars.outputs.datetimestr }}"
         prerelease: ${{ github.event_name == 'schedule' }}

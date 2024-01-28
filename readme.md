@@ -36,4 +36,5 @@ Tested in:
 ## Version string meanings
 
 - `x11`: built with X11 GUI support
+- `pgtk`: built with PGTK GUI support, for wayland desktop
 - `nox`: built without GUI support
