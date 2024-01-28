@@ -14,13 +14,21 @@ ARGS=""
 ARGS+=" --disable-locallisppath"
 ARGS+=" --with-native-compilation=aot --with-json --with-threads --with-sqlite3 --with-tree-sitter"
 ARGS+=" --with-dbus --with-xml2 --with-modules --with-libgmp --with-gpm --with-lcms2"
-if [ "$BUILD_WITH_X11" = "yes" ]; then
+
+if [ "$BUILD_GUI" = "pgtk" ]; then
+    ARGS+=" --with-pgtk --without-x --without-gconf --without-ns"
+elif [ "$BUILD_GUI" = "x11" ]; then
     ARGS+=" --with-x --without-pgtk --without-gconf --with-x-toolkit=gtk3"
-    ARGS+=" --with-gif --with-jpeg --with-png --with-rsvg --with-tiff --with-imagemagick --with-webp"
-    ARGS+=" --with-xft --with-cairo --with-harfbuzz --with-libotf --without-m17n-flt"
+    ARGS+=" --with-xft"
 else
     ARGS+=" --without-x --without-pgtk --without-ns"
 fi
+
+if [ "$BUILD_GUI" != "no" ]; then
+    ARGS+=" --with-gif --with-jpeg --with-png --with-rsvg --with-tiff --with-imagemagick --with-webp"
+    ARGS+=" --with-harfbuzz --with-cairo --with-libotf --without-m17n-flt"
+fi
+
 
 env \
     PATH=$DIST_APPDIR/bin:$PATH \
