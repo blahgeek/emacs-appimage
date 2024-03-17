@@ -104,4 +104,8 @@ for line in ldd_output.splitlines():
     logging.info(f'Copying {libpath}')
     dst_path = APPDIR / 'lib' / libpath.name
     shutil.copy2(libpath, dst_path)
-    subprocess.run(['patchelf', '--set-rpath', '$ORIGIN', dst_path])
+
+# patch all libs (not only those just copied), including libgccjit
+for n in (APPDIR / 'lib').iterdir():
+    if n.is_file() and '.so' in n.name:
+        subprocess.run(['patchelf', '--set-rpath', '$ORIGIN', str(n)])
