@@ -57,6 +57,9 @@ LIB_WHITELIST = [
     'libtinfo',
     'libwebpdemux',
     'libwebp',
+    # mpc and mpfr is depended by libgccjit
+    'libmpc',
+    'libmpfr',
 ]
 
 ldd_output = subprocess.check_output(['ldd', str(APPDIR / 'bin/emacs')], universal_newlines=True)
