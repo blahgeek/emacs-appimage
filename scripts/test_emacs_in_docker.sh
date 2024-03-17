@@ -8,6 +8,7 @@ cp "$EMACS_APPIMAGE" ./Emacs.AppImage
 chmod +x ./Emacs.AppImage
 
 cat <<-EOF > test.el
+(native-compile '(lambda (x) (* x 2)))
 (message "hello world!")
 EOF
 
