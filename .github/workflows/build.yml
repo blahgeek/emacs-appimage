@@ -60,7 +60,7 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-artifact@v3
       with:
-        name: builder-image
+        name: tester-image_ubuntu2004
         path: /tmp/tester-image_ubuntu2004.tar
 
   setup-vars:
