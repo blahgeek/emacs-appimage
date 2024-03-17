@@ -97,8 +97,8 @@ jobs:
         docker load -i /tmp/builder-image.tar
         docker image ls -a
 
-    - name: Run and package
-      run: ./run-and-package.sh builder-image:latest ./emacs-src BUILD_GUI=${{ matrix.build_gui }}
+    - name: Build and package
+      run: ./build.sh builder-image:latest ./emacs-src BUILD_GUI=${{ matrix.build_gui }}
 
     - name: Upload binary to release
       uses: svenstaro/upload-release-action@v2

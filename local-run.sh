@@ -11,4 +11,4 @@ popd
 docker build .  # next step has no log, so build first
 IMAGE_ID=$(docker build -q .)
 
-./run-and-package.sh "$IMAGE_ID" ./build/emacs-src BUILD_GUI=no
+./build.sh "$IMAGE_ID" ./build/emacs-src BUILD_GUI=no
