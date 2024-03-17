@@ -100,6 +100,11 @@ jobs:
     - name: Build and package
       run: ./build.sh builder-image:latest ./emacs-src BUILD_GUI=${{ matrix.build_gui }}
 
+    - name: Test in ubuntu:20.04 container
+      run: |
+        docker run -v ./dist:/dist -v ./scripts:/scripts ubuntu:20.04 \
+          /scripts/test_emacs_in_docker.sh /dist/Emacs.AppImage
+
     - name: Upload binary to release
       uses: svenstaro/upload-release-action@v2
       if: ${{ !contains(github.ref, 'dev-') }}
