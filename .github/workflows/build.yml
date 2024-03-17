@@ -35,10 +35,11 @@ jobs:
         outputs: type=docker,dest=/tmp/builder-image.tar
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: builder-image
         path: /tmp/builder-image.tar
+        compression-level: 0
 
   prepare-tester-docker:
     runs-on: ubuntu-latest
@@ -54,14 +55,17 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         file: tests/Dockerfile.ubuntu2004
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
         tags: tester-image:ubuntu2004
         outputs: type=docker,dest=/tmp/tester-image_ubuntu2004.tar
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: tester-image_ubuntu2004
         path: /tmp/tester-image_ubuntu2004.tar
+        compression-level: 0
 
   setup-vars:
     runs-on: ubuntu-latest
@@ -111,9 +115,10 @@ jobs:
         path: emacs-src
 
     - name: Download artifact
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         path: /tmp
+        merge-multiple: true
 
     - name: Load image
       run: |
