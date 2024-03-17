@@ -1,5 +1,9 @@
 #!/bin/bash -ex
 
+if cat /etc/os-release | grep -i ubuntu; then
+    apt-get update && apt-get install -y ubuntu-desktop
+fi
+
 EMACS_APPIMAGE="$(realpath "$1")"
 
 cd "$(mktemp -d)"
