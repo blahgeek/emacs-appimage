@@ -39,6 +39,7 @@ jobs:
       with:
         name: builder-image
         path: /tmp/builder-image.tar
+        compression-level: 0
 
   prepare-tester-docker:
     runs-on: ubuntu-latest
@@ -62,6 +63,7 @@ jobs:
       with:
         name: tester-image_ubuntu2004
         path: /tmp/tester-image_ubuntu2004.tar
+        compression-level: 0
 
   setup-vars:
     runs-on: ubuntu-latest
