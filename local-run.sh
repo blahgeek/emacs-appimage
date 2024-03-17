@@ -5,7 +5,7 @@ rm -rf ./dist ./build
 
 mkdir build
 pushd build
-git clone -b 29.2 --depth 1 https://github.com/emacs-mirror/emacs emacs-src
+git clone -b emacs-29.2 --depth 1 https://github.com/emacs-mirror/emacs emacs-src
 popd
 
 docker build .  # next step has no log, so build first
