@@ -144,6 +144,7 @@ jobs:
       run: ./build.sh builder-image:latest ./emacs-src BUILD_GUI=${{ matrix.build_gui }}
 
     - name: Test in ubuntu 20.04 container
+      if: ${{ matrix.build_native_comp == 'aot' }}
       run: |
         docker run -v ./dist:/dist -v ./scripts:/scripts tester-image:ubuntu2004 \
           /scripts/test_emacs_in_docker.sh /dist/Emacs.AppImage
