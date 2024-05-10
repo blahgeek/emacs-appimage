@@ -74,8 +74,8 @@ jobs:
         id: setup-vars
         run: |
           SOURCES='
-            {"name": "29.2", "repo": "emacs-mirror/emacs", ref: "emacs-29.2" },
             {"name": "29.3", "repo": "emacs-mirror/emacs", ref: "emacs-29.3" },
+            {"name": "master-mps", "repo": "emacs-mirror/emacs", ref: "scratch/igc" },
           '
           if [ $GITHUB_EVENT_NAME = "schedule" ]; then
             SOURCES='

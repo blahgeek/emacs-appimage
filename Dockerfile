@@ -40,6 +40,14 @@ RUN cd tree-sitter-0.20.8 && \
     make -j$(nproc) CC=gcc-8 && \
     make install PREFIX=$DIST_APPDIR
 
+# mps
+RUN wget -O mps-release-1.118.0.tar.gz https://github.com/Ravenbrook/mps/archive/refs/tags/release-1.118.0.tar.gz && \
+    tar xf mps-release-1.118.0.tar.gz && \
+    cd mps-release-1.118.0 && \
+    ./configure --prefix=/usr/local/ && \
+    make && make install && \
+    rm ../mps-release-1.118.0.tar.gz
+
 RUN apt-get install -y \
     xorg libx11-dev libgtk-3-dev \
     libjpeg-dev libgif-dev libtiff-dev libxmp-dev \

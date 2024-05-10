@@ -14,6 +14,7 @@ ARGS=""
 ARGS+=" --disable-locallisppath"
 ARGS+=" --with-native-compilation=aot --with-json --with-threads --with-sqlite3 --with-tree-sitter"
 ARGS+=" --with-dbus --with-xml2 --with-modules --with-libgmp --with-gpm --with-lcms2"
+ARGS+=" --with-mps"
 
 if [ "$BUILD_GUI" = "pgtk" ]; then
     ARGS+=" --with-pgtk --without-x --without-gconf --without-ns"
