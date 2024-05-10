@@ -99,7 +99,7 @@ jobs:
           - source: "master-mps:scratch/igc"
             build_gui: "pgtk"
           - source: "master-mps:scratch/igc"
-            build_gui: "aot"
+            build_native_comp: "aot"
         include:
           # mps version does not work with AOT native comp?
           - source: "master-mps:scratch/igc"
