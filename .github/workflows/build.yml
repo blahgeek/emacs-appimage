@@ -73,14 +73,9 @@ jobs:
       - name: Setup matrix source
         id: setup-vars
         run: |
-          SOURCES='
-            {"name": "29.3", "repo": "emacs-mirror/emacs", ref: "emacs-29.3" },
-            {"name": "master-mps", "repo": "emacs-mirror/emacs", ref: "scratch/igc" },
-          '
+          SOURCES='"29.3:emacs-29.3", "master-mps:scratch/igc"'
           if [ $GITHUB_EVENT_NAME = "schedule" ]; then
-            SOURCES='
-              {"name": "master", "repo": "emacs-mirror/emacs", ref: "master" }
-            '
+            SOURCES='"master:master"'
           fi
           echo sources=[$SOURCES] >> $GITHUB_OUTPUT
           echo datetimestr=$(date +%Y%m%d-%H%M) >> $GITHUB_OUTPUT
@@ -99,6 +94,9 @@ jobs:
       matrix:
         source: ${{ fromJson(needs.setup-vars.outputs.sources) }}
         build_gui: [ "x11", "pgtk", "no" ]
+        exclude:
+          - source: "master-mps:scratch/igc"
+            build_gui: "pgtk"
 
     steps:
     - name: Install fuse
@@ -107,11 +105,20 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    # steps.split_source_str.outputs
+    #  ._0: name
+    #  ._1: branch
+    - uses: winterjung/split@v2
+      id: split_source_str
+      with:
+        msg: ${{ matrix.source }}
+        separator: ":"
+
     - name: Download emacs source from repo
       uses: actions/checkout@v4
       with:
-        repository: ${{ matrix.source.repo }}
-        ref: ${{ matrix.source.ref }}
+        repository: "emacs-mirror/emacs"
+        ref: ${{ steps.split_source_str.outputs._1 }}
         path: emacs-src
 
     - name: Download artifact
@@ -146,7 +153,7 @@ jobs:
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: dist/Emacs.AppImage
-        asset_name: Emacs-${{ matrix.source.name }}-${{ matrix.build_gui == 'no' && 'nox' || matrix.build_gui }}.AppImage
+        asset_name: Emacs-${{ steps.split_source_str.outputs._0 }}-${{ matrix.build_gui == 'no' && 'nox' || matrix.build_gui }}.AppImage
         tag: ${{ github.event_name == 'schedule' && format('daily-master-build-{0}', needs.setup-vars.outputs.datetimestr) || github.ref }}
         release_name: "${{ github.event_name == 'schedule' && 'Daily master build' || 'Release build' }} ${{ needs.setup-vars.outputs.datetimestr }}"
         prerelease: ${{ github.event_name == 'schedule' }}
