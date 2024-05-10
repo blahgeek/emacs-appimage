@@ -97,13 +97,14 @@ jobs:
         build_native_comp: [ "aot" ]
         exclude:
           - source: "master-mps:scratch/igc"
-            build_gui: "pgtk"
-          - source: "master-mps:scratch/igc"
-            build_native_comp: "aot"
         include:
           # mps version does not work with AOT native comp?
           - source: "master-mps:scratch/igc"
             build_native_comp: "yes"
+            build_gui: "x11"
+          - source: "master-mps:scratch/igc"
+            build_native_comp: "yes"
+            build_gui: "no"
 
     steps:
     - name: Install fuse
