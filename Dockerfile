@@ -34,26 +34,26 @@ RUN wget http://ftp.gnu.org/gnu/binutils/binutils-2.41.tar.gz && \
 
 # treesitter
 RUN wget https://github.com/tree-sitter/tree-sitter/archive/refs/tags/v0.20.8.tar.gz && \
-    tar xf v0.20.8.tar.gz
-
-RUN cd tree-sitter-0.20.8 && \
+    tar xf v0.20.8.tar.gz && \
+    cd tree-sitter-0.20.8 && \
     make -j$(nproc) CC=gcc-8 && \
-    make install PREFIX=$DIST_APPDIR
+    make install PREFIX=$DIST_APPDIR && \
+    cd .. && rm -rf tree-sitter-0.20.8 v0.20.8.tar.gz
 
-# mps
+# mps. install to /usr/local. it's static library
 RUN wget -O mps-release-1.118.0.tar.gz https://github.com/Ravenbrook/mps/archive/refs/tags/release-1.118.0.tar.gz && \
     tar xf mps-release-1.118.0.tar.gz && \
     cd mps-release-1.118.0 && \
     ./configure --prefix=/usr/local/ && \
     make && make install && \
-    rm ../mps-release-1.118.0.tar.gz
+    cd .. && rm -rf mps-release-1.118.0 ../mps-release-1.118.0.tar.gz
 
-RUN apt-get install -y \
+RUN apt-get update && apt-get install -y \
     xorg libx11-dev libgtk-3-dev \
     libjpeg-dev libgif-dev libtiff-dev libxmp-dev \
     libsqlite3-dev libmagickcore-dev libmagickwand-dev \
     libwebp-dev libotf-dev libcairo-dev libjansson-dev \
-    libgnutls28-dev libxpm-dev libncurses-dev
-RUN apt-get install -y git texinfo
+    libgnutls28-dev libxpm-dev libncurses-dev \
+    git texinfo
 
 ADD scripts /work/scripts

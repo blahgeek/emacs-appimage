@@ -5,10 +5,10 @@ rm -rf ./dist ./build
 
 mkdir build
 pushd build
-git clone -b emacs-29.2 --depth 1 https://github.com/emacs-mirror/emacs emacs-src
+git clone -b scratch/igc --depth 1 https://github.com/emacs-mirror/emacs emacs-src
 popd
 
 docker build .  # next step has no log, so build first
 IMAGE_ID=$(docker build -q .)
 
-./build.sh "$IMAGE_ID" ./build/emacs-src BUILD_GUI=no
+./build.sh "$IMAGE_ID" ./build/emacs-src BUILD_GUI=x11 BUILD_NATIVE_COMP=no
