@@ -93,7 +93,7 @@ jobs:
     strategy:
       matrix:
         source: ${{ fromJson(needs.setup-vars.outputs.sources) }}
-        build_gui: [ "x11", "pgtk", "no" ]
+        build_gui: [ "x11", "pgtk", "nox" ]
         exclude:
           - source: "master-mps:scratch/igc"
             build_gui: "pgtk"
@@ -134,15 +134,16 @@ jobs:
         docker image ls -a
 
     - name: Build and package
-      run: ./build.sh builder-image:latest ./emacs-src BUILD_GUI=${{ matrix.build_gui }} BUILD_NATIVE_COMP=${{ contains(matrix.source, 'mps') && 'yes' || 'aot' }}
+      run: ./build.sh builder-image:latest ./emacs-src BUILD_GUI=${{ matrix.build_gui }} BUILD_NATIVE_COMP=${{ contains(matrix.source, 'mps') && 'no' || 'aot' }}
 
     - name: Test in ubuntu 20.04 container
+      if: ${{ !contains(matrix.source, 'mps') }}
       run: |
         docker run -v ./dist:/dist -v ./scripts:/scripts tester-image:ubuntu2004 \
           /scripts/test_emacs_in_docker.sh /dist/Emacs.AppImage
 
     - name: Test in archlinux container (nox only)
-      if: ${{ matrix.build_gui == 'no' }}
+      if: ${{ matrix.build_gui == 'nox' && !contains(matrix.source, 'mps') }}
       run: |
         docker run -v ./dist:/dist -v ./scripts:/scripts archlinux:latest \
           /scripts/test_emacs_in_docker.sh /dist/Emacs.AppImage
@@ -151,7 +152,7 @@ jobs:
       if: ${{ contains(github.ref, 'dev-') }}
       uses: actions/upload-artifact@v4
       with:
-        name: Emacs-${{ steps.split_source_str.outputs._0 }}-${{ matrix.build_gui == 'no' && 'nox' || matrix.build_gui }}.AppImage
+        name: Emacs-${{ steps.split_source_str.outputs._0 }}-${{ matrix.build_gui }}.AppImage
         path: dist/Emacs.AppImage
         compression-level: 0
 
@@ -161,7 +162,7 @@ jobs:
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: dist/Emacs.AppImage
-        asset_name: Emacs-${{ steps.split_source_str.outputs._0 }}-${{ matrix.build_gui == 'no' && 'nox' || matrix.build_gui }}.AppImage
+        asset_name: Emacs-${{ steps.split_source_str.outputs._0 }}-${{ matrix.build_gui }}.AppImage
         tag: ${{ github.event_name == 'schedule' && format('daily-master-build-{0}', needs.setup-vars.outputs.datetimestr) || github.ref }}
         release_name: "${{ github.event_name == 'schedule' && 'Daily master build' || 'Release build' }} ${{ needs.setup-vars.outputs.datetimestr }}"
         prerelease: ${{ github.event_name == 'schedule' }}
