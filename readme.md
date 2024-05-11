@@ -13,7 +13,7 @@ This repo builds Emacs as AppImages for x86-64 linux systems.
 ## Download
 
 - **[Latest Release](https://github.com/blahgeek/emacs-appimage/releases/latest)**
-- **[Daily master build](https://github.com/blahgeek/emacs-appimage/releases/)**
+- **[Daily master build](https://github.com/blahgeek/emacs-appimage/releases/)**  [![Build](https://github.com/blahgeek/emacs-appimage/actions/workflows/build.yml/badge.svg?branch=master&event=schedule)](https://github.com/blahgeek/emacs-appimage/actions/workflows/build.yml)
 
 ## Version string meanings
 
