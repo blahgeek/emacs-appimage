@@ -1,17 +1,27 @@
 name: Build
-run-name: "${{ github.event_name == 'schedule' && 'Daily master build' || format('Release build for {0}', github.ref) }}"
 
 permissions:
   contents: write
 
 on:
   push:
-    tags:
-      - '*'
     branches:
       - 'dev-*'
   schedule:
     - cron: '0 0 * * *'
+  workflow_dispatch:
+    inputs:
+      is_release:
+        description: 'Is release or daily build'
+        required: true
+        type: boolean
+      skip_tests:
+        description: 'Skip tests after build'
+        default: false
+        required: false
+        type: boolean
+
+run-name: "${{ inputs.is_release && 'Release build' || 'Daily master build' }}"
 
 jobs:
 
@@ -134,12 +144,13 @@ jobs:
       run: ./build.sh builder-image:latest ./emacs-src BUILD_GUI=${{ matrix.build_gui }}
 
     - name: Test in ubuntu 20.04 container
+      if: ${{ !inputs.skip_tests }}
       run: |
         docker run -v ./dist:/dist -v ./scripts:/scripts tester-image:ubuntu2004 \
           /scripts/test_emacs_in_docker.sh /dist/Emacs.AppImage
 
     - name: Test in archlinux container (nox only)
-      if: ${{ matrix.build_gui == 'nox' }}
+      if: ${{ matrix.build_gui == 'nox' && !inputs.skip_tests }}
       run: |
         docker run -v ./dist:/dist -v ./scripts:/scripts archlinux:latest \
           /scripts/test_emacs_in_docker.sh /dist/Emacs.AppImage
@@ -151,8 +162,8 @@ jobs:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: dist/Emacs.AppImage
         asset_name: Emacs-${{ steps.split_source_str.outputs._0 }}-${{ matrix.build_gui }}.AppImage
-        tag: ${{ github.event_name == 'schedule' && format('daily-master-build-{0}', needs.setup-vars.outputs.datetimestr) || github.ref }}
-        release_name: "${{ github.event_name == 'schedule' && 'Daily master build' || 'Release build' }} ${{ needs.setup-vars.outputs.datetimestr }}"
-        prerelease: ${{ github.event_name == 'schedule' }}
-        make_latest: ${{ github.event_name != 'schedule' }}
+        tag: ${{ inputs.is_release && format('release-build-{0}', needs.setup-vars.outputs.datetimestr) || format('daily-master-build-{0}', needs.setup-vars.outputs.datetimestr) }}
+        release_name: "${{ inputs.is_release && 'Release build' || 'Daily master build' }} ${{ needs.setup-vars.outputs.datetimestr }}"
+        prerelease: ${{ !inputs.is_release || github.event_name == 'schedule' }}
+        make_latest: ${{ inputs.is_release }}
         body: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
