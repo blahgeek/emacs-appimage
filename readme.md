@@ -10,9 +10,21 @@ This repo builds Emacs as AppImages for x86-64 linux systems.
 - Automatically built on Github Actions
 - Provides both latest release and daily master builds
 
+## Download
+
+- **[Latest Release](https://github.com/blahgeek/emacs-appimage/releases/latest)**
+- **[Daily master build](https://github.com/blahgeek/emacs-appimage/releases/)**
+
+## Version string meanings
+
+- **NEW!** `mps`: the experimental MPS GC feature from `scratch/igc` branch, in daily master build only. This version does not supports native-comp or pgtk yet.
+- `x11`: built with X11 GUI support
+- `pgtk`: built with PGTK GUI support, for wayland desktop
+- `nox`: built without GUI support
+
 ## How-to
 
-1. Download *.AppImage in [release](https://github.com/blahgeek/emacs-appimage/releases/)
+1. Download *.AppImage
 2. `chmod +x Emacs.AppImage`
 3. `./Emacs.AppImage`
 
@@ -32,9 +44,3 @@ Tested in:
 
 - Ubuntu 20.04
 - Fedora 39
-
-## Version string meanings
-
-- `x11`: built with X11 GUI support
-- `pgtk`: built with PGTK GUI support, for wayland desktop
-- `nox`: built without GUI support
