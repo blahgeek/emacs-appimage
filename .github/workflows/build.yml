@@ -1,5 +1,5 @@
 name: Build
-run-name: "${{ github.event_name == 'schedule' && 'Daily master build' || format('Release build for {0}', github.ref) }}"
+run-name: "${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && 'Daily master build' || format('Release build for {0}', github.ref) }}"
 
 permissions:
   contents: write
@@ -12,6 +12,8 @@ on:
       - 'dev-*'
   schedule:
     - cron: '0 0 * * *'
+  workflow_dispatch:
+
 
 jobs:
 
@@ -74,7 +76,7 @@ jobs:
         id: setup-vars
         run: |
           SOURCES='"29.3:emacs-29.3"'
-          if [ $GITHUB_EVENT_NAME = "schedule" ]; then
+          if [[ $GITHUB_EVENT_NAME = "schedule" || $GITHUB_EVENT_NAME = "workflow_dispatch" ]]; then
             SOURCES='"master:master", "master-mps:scratch/igc"'
           fi
           echo sources=[$SOURCES] >> $GITHUB_OUTPUT
@@ -162,8 +164,8 @@ jobs:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: dist/Emacs.AppImage
         asset_name: Emacs-${{ steps.split_source_str.outputs._0 }}-${{ matrix.build_gui }}.AppImage
-        tag: ${{ github.event_name == 'schedule' && format('daily-master-build-{0}', needs.setup-vars.outputs.datetimestr) || github.ref }}
-        release_name: "${{ github.event_name == 'schedule' && 'Daily master build' || 'Release build' }} ${{ needs.setup-vars.outputs.datetimestr }}"
-        prerelease: ${{ github.event_name == 'schedule' }}
-        make_latest: ${{ github.event_name != 'schedule' }}
+        tag: ${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && format('daily-master-build-{0}', needs.setup-vars.outputs.datetimestr) || github.ref }}
+        release_name: "${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && 'Daily master build' || 'Release build' }} ${{ needs.setup-vars.outputs.datetimestr }}"
+        prerelease: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
+        make_latest: ${{ github.event_name != 'schedule' && github.event_name != 'workflow_dispatch' }}
         body: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
