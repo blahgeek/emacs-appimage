@@ -10,7 +10,8 @@ RUN apt-get update && apt-get install -y \
     xz-utils wget \
     build-essential g++ make file \
     libgmp-dev libmpfr-dev libmpc-dev \
-    gcc-8 bison patchelf
+    gcc-8 bison patchelf && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN wget https://ftp.gnu.org/gnu/gcc/gcc-13.2.0/gcc-13.2.0.tar.xz && \
     tar xf gcc-13.2.0.tar.xz && \
@@ -54,6 +55,7 @@ RUN apt-get update && apt-get install -y \
     libsqlite3-dev libmagickcore-dev libmagickwand-dev \
     libwebp-dev libotf-dev libcairo-dev libjansson-dev \
     libgnutls28-dev libxpm-dev libncurses-dev \
-    git texinfo
+    git texinfo && \
+    rm -rf /var/lib/apt/lists/*
 
 ADD scripts /work/scripts
