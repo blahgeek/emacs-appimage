@@ -47,15 +47,21 @@ jobs:
         name: builder-image
         path: /tmp
 
+    - name: Load builder image
+      run: |
+        docker load -i /tmp/builder-image.tar
+        docker image ls -a
+
     - name: Download tester ubuntu2004 image
+      if: ${{ inputs.do_test }}
       uses: actions/download-artifact@v4
       with:
         name: tester-image_ubuntu2004
         path: /tmp
 
-    - name: Load image
+    - name: Load tester image
+      if: ${{ inputs.do_test }}
       run: |
-        docker load -i /tmp/builder-image.tar
         docker load -i /tmp/tester-image_ubuntu2004.tar
         docker image ls -a
 
