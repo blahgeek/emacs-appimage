@@ -1,0 +1,50 @@
+name: daily-mps
+run-name: Daily mps master build
+
+permissions:
+  contents: write
+
+on:
+  push:
+    branches:
+      - 'dev-*'
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+
+  prepare-docker:
+    uses: ./.github/workflows/_prepare-docker.yml
+
+  setup-vars:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup vars
+        id: setup-vars
+        run: |
+          echo datetimestr=$(date +%Y%m%d-%H%M) >> $GITHUB_OUTPUT
+    outputs:
+      datetimestr: ${{ steps.setup-vars.outputs.datetimestr }}
+
+  build-emacs:
+    needs:
+      - prepare-docker
+      - setup-vars
+
+    strategy:
+      matrix:
+        build_gui:
+          - x11
+          - nox
+
+    uses: ./.github/workflows/_build-emacs.yml
+    with:
+      name: master-mps
+      branch: scratch/igc
+      build_gui: ${{ matrix.build_gui }}
+      build_native_comp: false
+      do_test: false
+      do_release: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
+      release_name: Daily mps master build ${{ needs.setup-vars.outputs.datetimestr }}
+      release_latest: false

@@ -1,0 +1,101 @@
+on:
+  workflow_call:
+    inputs:
+      name:
+        required: true
+        type: string
+      branch:
+        required: true
+        type: string
+      build_gui:
+        required: true
+        type: string
+      build_native_comp:
+        required: true
+        type: string
+      do_test:
+        type: boolean
+      do_release:
+        type: boolean
+      release_name:
+        type: string
+      release_latest:
+        type: boolean
+
+jobs:
+
+  build-emacs:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Install fuse
+      run: sudo apt-get install -y fuse libfuse2
+
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Download emacs source from repo
+      uses: actions/checkout@v4
+      with:
+        repository: "emacs-mirror/emacs"
+        ref: ${{ inputs.branch }}
+        path: emacs-src
+
+    - name: Download builder image
+      uses: actions/download-artifact@v4
+      with:
+        name: builder-image
+        path: /tmp
+
+    - name: Load builder image
+      run: |
+        docker load -i /tmp/builder-image.tar
+        docker image ls -a
+
+    - name: Download tester ubuntu2004 image
+      if: ${{ inputs.do_test }}
+      uses: actions/download-artifact@v4
+      with:
+        name: tester-image_ubuntu2004
+        path: /tmp
+
+    - name: Load tester image
+      if: ${{ inputs.do_test }}
+      run: |
+        docker load -i /tmp/tester-image_ubuntu2004.tar
+        docker image ls -a
+
+    - name: Build and package
+      run: ./build.sh builder-image:latest ./emacs-src BUILD_GUI=${{ inputs.build_gui }} BUILD_NATIVE_COMP=${{ inputs.build_native_comp }}
+
+    - name: Test in ubuntu 20.04 container
+      if: ${{ inputs.do_test }}
+      run: |
+        docker run -v ./dist:/dist -v ./scripts:/scripts tester-image:ubuntu2004 \
+          /scripts/test_emacs_in_docker.sh /dist/Emacs.AppImage
+
+    - name: Test in archlinux container (nox only)
+      if: ${{ inputs.build_gui == 'nox' && inputs.do_test }}
+      run: |
+        docker run -v ./dist:/dist -v ./scripts:/scripts archlinux:latest \
+          /scripts/test_emacs_in_docker.sh /dist/Emacs.AppImage
+
+    - name: Upload binary as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Emacs-${{ inputs.name }}-${{ inputs.build_gui }}.AppImage
+        path: dist/Emacs.AppImage
+        compression-level: 0
+
+    - name: Upload binary to release
+      uses: svenstaro/upload-release-action@v2
+      if: ${{ inputs.do_release }}
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: dist/Emacs.AppImage
+        asset_name: Emacs-${{ inputs.name }}-${{ inputs.build_gui }}.AppImage
+        tag: github-action-build-${{ github.run_id }}
+        release_name: ${{ inputs.release_name }}
+        prerelease: ${{ !inputs.release_latest }}
+        make_latest: ${{ inputs.release_latest }}
+        body: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}

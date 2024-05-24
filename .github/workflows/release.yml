@@ -1,0 +1,40 @@
+name: release
+run-name: Release build
+
+permissions:
+  contents: write
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        type: string
+        required: true
+
+jobs:
+
+  prepare-docker:
+    uses: ./.github/workflows/_prepare-docker.yml
+
+  build-emacs:
+    needs:
+      - prepare-docker
+      - setup-vars
+
+    strategy:
+      matrix:
+        build_gui:
+          - x11
+          - pgtk
+          - nox
+
+    uses: ./.github/workflows/_build-emacs.yml
+    with:
+      name: ${{ inputs.version }}
+      branch: emacs-${{ inputs.version }}
+      build_gui: ${{ matrix.build_gui }}
+      build_native_comp: true
+      do_test: true
+      do_release: true
+      release_name: Release ${{ inputs.version }}
+      release_latest: true

@@ -1,0 +1,55 @@
+on:
+  workflow_call:
+
+jobs:
+  prepare-builder-docker:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build and export
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        tags: builder-image:latest
+        outputs: type=docker,dest=/tmp/builder-image.tar
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: builder-image
+        path: /tmp/builder-image.tar
+        compression-level: 0
+
+  prepare-tester-docker:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build and export
+      uses: docker/build-push-action@v5
+      with:
+        file: tests/Dockerfile.ubuntu2004
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        tags: tester-image:ubuntu2004
+        outputs: type=docker,dest=/tmp/tester-image_ubuntu2004.tar
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: tester-image_ubuntu2004
+        path: /tmp/tester-image_ubuntu2004.tar
+        compression-level: 0
