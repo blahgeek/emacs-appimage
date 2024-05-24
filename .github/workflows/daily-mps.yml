@@ -43,7 +43,7 @@ jobs:
       name: master-mps
       branch: scratch/igc
       build_gui: ${{ matrix.build_gui }}
-      build_native_comp: false
+      build_native_comp: "no"
       do_test: false
       do_release: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
       release_name: Daily mps master build ${{ needs.setup-vars.outputs.datetimestr }}

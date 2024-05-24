@@ -33,7 +33,7 @@ jobs:
       name: ${{ inputs.version }}
       branch: emacs-${{ inputs.version }}
       build_gui: ${{ matrix.build_gui }}
-      build_native_comp: true
+      build_native_comp: aot
       do_test: true
       do_release: true
       release_name: Release ${{ inputs.version }}
