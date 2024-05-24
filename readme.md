@@ -12,12 +12,18 @@ This repo builds Emacs as AppImages for x86-64 linux systems.
 
 ## Download
 
-- **[Latest Release](https://github.com/blahgeek/emacs-appimage/releases/latest)**
-- **[Daily master build](https://github.com/blahgeek/emacs-appimage/releases/)**  [![Build](https://github.com/blahgeek/emacs-appimage/actions/workflows/build.yml/badge.svg?branch=master&event=schedule)](https://github.com/blahgeek/emacs-appimage/actions/workflows/build.yml)
+- **Latest Release**
+  * [Version 29.3](https://github.com/blahgeek/emacs-appimage/releases/tag/v20240326-29.3)
+  * [Version 29.2](https://github.com/blahgeek/emacs-appimage/releases/tag/v20240326-29.3)
+- **Daily master build**
+  * [![daily-master](https://github.com/blahgeek/emacs-appimage/actions/workflows/daily-master.yml/badge.svg)](https://github.com/blahgeek/emacs-appimage/actions/workflows/daily-master.yml)
+  * [All downloads](https://github.com/blahgeek/emacs-appimage/releases?q=Daily+master+build&expanded=true)
+- **NEW! Daily mps build**: the experimental MPS GC feature from `scratch/igc` branch. This version does not supports native-comp or pgtk yet.
+  * [![daily-mps](https://github.com/blahgeek/emacs-appimage/actions/workflows/daily-mps.yml/badge.svg)](https://github.com/blahgeek/emacs-appimage/actions/workflows/daily-mps.yml)
+  * [All downloads](https://github.com/blahgeek/emacs-appimage/releases?q=mps&expanded=true)
 
 ## Version string meanings
 
-- **NEW!** `mps`: the experimental MPS GC feature from `scratch/igc` branch, in daily master build only. This version does not supports native-comp or pgtk yet.
 - `x11`: built with X11 GUI support
 - `pgtk`: built with PGTK GUI support, for wayland desktop
 - `nox`: built without GUI support
