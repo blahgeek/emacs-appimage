@@ -20,7 +20,7 @@ This repo builds Emacs as AppImages for x86-64 linux systems.
   * [All downloads](https://github.com/blahgeek/emacs-appimage/releases?q=Daily+master+build&expanded=true)
 - **NEW! Daily mps build**: the experimental MPS GC feature from `scratch/igc` branch. This version does not supports native-comp or pgtk yet.
   * [![daily-mps](https://github.com/blahgeek/emacs-appimage/actions/workflows/daily-mps.yml/badge.svg)](https://github.com/blahgeek/emacs-appimage/actions/workflows/daily-mps.yml)
-  * [All downloads](https://github.com/blahgeek/emacs-appimage/releases?q=mps&expanded=true)
+  * [All downloads](https://github.com/blahgeek/emacs-appimage/releases/tag/daily-master-build-20240519-0010)
 
 ## Version string meanings
 
