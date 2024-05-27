@@ -33,17 +33,21 @@ jobs:
       - setup-vars
 
     strategy:
+      fail-fast: false
       matrix:
         build_gui:
           - x11
           - nox
+        build_native_comp:
+          - "no"
+          - "aot"
 
     uses: ./.github/workflows/_build-emacs.yml
     with:
-      name: master-mps
+      name: master-mps-${{ matrix.build_native_comp == 'no' && 'no_native_comp' || 'native_comp' }}
       branch: scratch/igc
       build_gui: ${{ matrix.build_gui }}
-      build_native_comp: "no"
+      build_native_comp: ${{ matrix.build_native_comp }}
       do_test: false
       do_release: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
       release_name: Daily mps master build ${{ needs.setup-vars.outputs.datetimestr }}
