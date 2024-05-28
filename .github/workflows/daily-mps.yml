@@ -1,5 +1,5 @@
 name: daily-mps
-run-name: Daily mps master build
+run-name: Daily mps build
 
 permissions:
   contents: write
@@ -44,11 +44,11 @@ jobs:
 
     uses: ./.github/workflows/_build-emacs.yml
     with:
-      name: master-mps-${{ matrix.build_native_comp == 'no' && 'no_native_comp' || 'native_comp' }}
+      name: mps-${{ matrix.build_native_comp == 'no' && 'no_native_comp' || 'native_comp' }}
       branch: scratch/igc
       build_gui: ${{ matrix.build_gui }}
       build_native_comp: ${{ matrix.build_native_comp }}
       do_test: false
       do_release: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
-      release_name: Daily mps master build ${{ needs.setup-vars.outputs.datetimestr }}
+      release_name: Daily mps build ${{ needs.setup-vars.outputs.datetimestr }}
       release_latest: false
