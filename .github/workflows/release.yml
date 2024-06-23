@@ -19,7 +19,6 @@ jobs:
   build-emacs:
     needs:
       - prepare-docker
-      - setup-vars
 
     strategy:
       matrix:
