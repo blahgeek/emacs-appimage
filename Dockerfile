@@ -47,7 +47,7 @@ RUN wget -O mps-release-1.118.0.tar.gz https://github.com/Ravenbrook/mps/archive
     cd mps-release-1.118.0 && \
     ./configure --prefix=/usr/local/ && \
     make && make install && \
-    cd .. && rm -rf mps-release-1.118.0 ../mps-release-1.118.0.tar.gz
+    cd .. && rm -rf mps-release-1.118.0 mps-release-1.118.0.tar.gz
 
 RUN apt-get update && apt-get install -y \
     xorg libx11-dev libgtk-3-dev \
