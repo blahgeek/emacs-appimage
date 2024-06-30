@@ -1,3 +1,3 @@
 FROM archlinux:latest
 
-RUN pacman -Sy && pacman -S xfce4
+RUN pacman -Sy --noconfirm && pacman -S --noconfirm xfce4
