@@ -28,7 +28,7 @@ jobs:
         path: /tmp/builder-image.tar
         compression-level: 0
 
-  prepare-tester-docker:
+  prepare-tester-docker-ubuntu2004:
     runs-on: ubuntu-latest
 
     steps:
@@ -42,9 +42,9 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         file: tests/Dockerfile.ubuntu2004
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
-        tags: tester-image:ubuntu2004
+        # cache-from: type=gha
+        # cache-to: type=gha,mode=max
+        tags: tester-image_ubuntu2004:latest
         outputs: type=docker,dest=/tmp/tester-image_ubuntu2004.tar
 
     - name: Upload artifact
@@ -52,4 +52,30 @@ jobs:
       with:
         name: tester-image_ubuntu2004
         path: /tmp/tester-image_ubuntu2004.tar
+        compression-level: 0
+
+  prepare-tester-docker-archlinux:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build and export
+      uses: docker/build-push-action@v5
+      with:
+        file: tests/Dockerfile.archlinux
+        # cache-from: type=gha
+        # cache-to: type=gha,mode=max
+        tags: tester-image_archlinux:latest
+        outputs: type=docker,dest=/tmp/tester-image_archlinux.tar
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: tester-image_archlinux
+        path: /tmp/tester-image_archlinux.tar
         compression-level: 0
