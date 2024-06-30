@@ -27,8 +27,9 @@ else
     ARGS+=" --without-x --without-pgtk --without-ns"
 fi
 
+ARGS+=" --without-tiff"
 if [ "$BUILD_GUI" != "no" ]; then
-    ARGS+=" --with-gif --with-jpeg --with-png --with-rsvg --with-tiff --with-imagemagick --with-webp"
+    ARGS+=" --with-gif --with-jpeg --with-png --with-rsvg --with-imagemagick --with-webp"
     ARGS+=" --with-harfbuzz --with-cairo --with-libotf --without-m17n-flt"
 fi
 
