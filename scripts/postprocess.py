@@ -91,14 +91,6 @@ LIB_WHITELIST = [
     # 'libpng16',  # depend by emacs. but should be present in users' system by gtk, so do not include
 ]
 
-# hack: replace needed from 0 to 1
-LIB_REPLACE = [
-    # in new systems, there's libtiff.so.6 instead of libtiff.so.5
-    # we cannot simply include libtiff.so.5 because GTK libraries in system would still load libtiff.so.6
-    # so let's remove this version requirement. it seems to work
-    ('libtiff.so.5', 'libtiff.so'),
-]
-
 ldd_output = subprocess.check_output(['ldd', str(APPDIR / 'bin/emacs')], universal_newlines=True)
 for line in ldd_output.splitlines():
     if '=>' not in line or 'not found' in line:
@@ -122,8 +114,3 @@ for line in ldd_output.splitlines():
 for n in (APPDIR / 'lib').iterdir():
     if n.is_file() and '.so' in n.name:
         subprocess.run(['patchelf', '--set-rpath', '$ORIGIN', str(n)])
-
-# patch executables
-for lib_src, lib_dst in LIB_REPLACE:
-    for n in all_bins:
-        subprocess.run(['patchelf', '--replace-needed', lib_src, lib_dst, str(APPDIR / 'bin' / n)])
