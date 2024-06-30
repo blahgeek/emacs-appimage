@@ -52,15 +52,27 @@ jobs:
         docker load -i /tmp/builder-image.tar
         docker image ls -a
 
+    - name: Download tester ubuntu2004 image
+      if: ${{ inputs.do_test }}
+      uses: actions/download-artifact@v4
+      with:
+        name: tester-image_ubuntu2004
+        path: /tmp
+
+    - name: Load tester image
+      if: ${{ inputs.do_test }}
+      run: |
+        docker load -i /tmp/tester-image_ubuntu2004.tar
+        docker image ls -a
+
     - name: Build and package
       run: ./build.sh builder-image:latest ./emacs-src BUILD_GUI=${{ inputs.build_gui }} BUILD_NATIVE_COMP=${{ inputs.build_native_comp }}
 
     - name: Test in ubuntu 20.04 container
       if: ${{ inputs.do_test }}
       run: |
-        docker run -v ./dist:/dist -v ./scripts:/scripts ubuntu:20.04 \
-          env DEBIAN_FRONTEND=noninteractive \
-          sh -c 'apt-get update && apt-get install -y ubuntu-desktop && /scripts/test_emacs_in_docker.sh /dist/Emacs.AppImage'
+        docker run -v ./dist:/dist -v ./scripts:/scripts tester-image:ubuntu2004 \
+          /scripts/test_emacs_in_docker.sh /dist/Emacs.AppImage
 
     - name: Test in archlinux container
       if: ${{ inputs.do_test }}
