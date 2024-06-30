@@ -83,11 +83,6 @@ LIB_WHITELIST = [
 
     # 'libdatrie',  # thai
 
-    # 'libtiff',  # depend by emacs. but should be present in users' system by gtk, so do not include
-    # 'libjbig',  # depend by tiff
-    # 'libjpeg',  # depend by tiff, emacs
-    # 'liblzma',  # depend by tiff
-
     # 'libpng16',  # depend by emacs. but should be present in users' system by gtk, so do not include
 ]
 

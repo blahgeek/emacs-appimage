@@ -27,10 +27,17 @@ else
     ARGS+=" --without-x --without-pgtk --without-ns"
 fi
 
-ARGS+=" --without-tiff --without-jpeg"
+# TODO: libtiff caused some trouble on compatibility:
+# it's depend by gtk (which we donot bundle) and have incompatible APIs between versions.
+# so disable libtiff for now
+# TODO: imagemagick requires dynamic coders. we don't support them correctly now (so it cannot work correctly)
+# so disable imagemagick for now
+ARGS+=" --without-tiff --without-imagemagick"
 if [ "$BUILD_GUI" != "no" ]; then
-    ARGS+=" --with-gif --with-png --with-rsvg --with-imagemagick --with-webp"
+    ARGS+=" --with-gif --with-png --with-rsvg --with-webp"
     ARGS+=" --with-harfbuzz --with-cairo --with-libotf --without-m17n-flt"
+    # use static lib for libjpeg, to prevent incompatible libjpeg.so version because it's depend by gtk
+    ARGS+=" --with-jpeg emacs_cv_jpeglib=/usr/lib/x86_64-linux-gnu/libjpeg.a"
 fi
 
 
