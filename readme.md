@@ -12,10 +12,9 @@ This repo builds Emacs as AppImages for x86-64 linux systems.
 
 ## Download
 
-- **Latest Release**
-  * [Version 29.4](https://github.com/blahgeek/emacs-appimage/releases/tag/github-action-build-9629983484)
-  * [Version 29.3](https://github.com/blahgeek/emacs-appimage/releases/tag/v20240326-29.3)
-  * [Version 29.2](https://github.com/blahgeek/emacs-appimage/releases/tag/v20240326-29.3)
+- **Release (latest version 29.4)**
+  * [![release](https://github.com/blahgeek/emacs-appimage/actions/workflows/release.yml/badge.svg)](https://github.com/blahgeek/emacs-appimage/actions/workflows/release.yml)
+  * [All downloads](https://github.com/blahgeek/emacs-appimage/releases?q=Release&expanded=true)
 - **Daily master build**
   * [![daily-master](https://github.com/blahgeek/emacs-appimage/actions/workflows/daily-master.yml/badge.svg)](https://github.com/blahgeek/emacs-appimage/actions/workflows/daily-master.yml)
   * [All downloads](https://github.com/blahgeek/emacs-appimage/releases?q=Daily+master+build&expanded=true)
