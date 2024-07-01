@@ -58,32 +58,32 @@ os.symlink('libc.so.6', str(gccjit_lib_path / 'libc.so'))
 
 # copy libraries
 LIB_WHITELIST = [
-    'libMagickCore-6.Q16',
-    'libMagickWand-6.Q16',
-    'libbz2',
-    'libcroco-0.6',
-    'libdatrie',
-    'libfftw3',
-    'libgif',
-    'libgomp',
-    'libjansson',
-    'libjbig',
-    'libjpeg',
-    'liblcms2',
-    'liblqr-1',
-    'libltdl',
-    'liblzma',
-    'libotf',
-    'libpng16',
-    'librsvg-2',
-    'libsqlite3',
-    'libtiff',
-    'libtinfo',
-    'libwebpdemux',
-    'libwebp',
-    # mpc and mpfr is depended by libgccjit
-    'libmpc',
-    'libmpfr',
+    'libMagickCore-6.Q16',  # depend by emacs
+    'libMagickWand-6.Q16',  # depend by emacs
+    'libbz2',  # depend by MagickCore
+    'libfftw3',  # depend by MagickCore
+    'libgomp',  # depend by MagickWand
+    'liblcms2',  # depend by emacs, MagickWand, MagickCore
+    'liblqr-1',  # depend by MagickWand, MagickCore
+    'libltdl',  # depend by MagickCore
+
+    'librsvg-2',  # depend by emacs
+    'libcroco-0.6',  # depend by rsvg
+
+    'libgif',  # depend by emacs
+    'libjansson',  # depend by emacs
+    'libotf',  # depend by emacs
+    'libsqlite3',  # depend by emacs
+    'libtinfo',  # depend by emacs
+    'libwebpdemux',  # depend by emacs
+    'libwebp',  # depend by emacs
+
+    'libmpc',  # depend by libgccjit
+    'libmpfr',  # depend by libgccjit
+
+    # 'libdatrie',  # thai
+
+    # 'libpng16',  # depend by emacs. but should be present in users' system by gtk, so do not include
 ]
 
 ldd_output = subprocess.check_output(['ldd', str(APPDIR / 'bin/emacs')], universal_newlines=True)
