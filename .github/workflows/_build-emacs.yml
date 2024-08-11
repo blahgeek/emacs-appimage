@@ -7,6 +7,8 @@ on:
       branch:
         required: true
         type: string
+      patch:
+        type: string
       build_gui:
         required: true
         type: string
@@ -40,6 +42,11 @@ jobs:
         repository: "emacs-mirror/emacs"
         ref: ${{ inputs.branch }}
         path: emacs-src
+
+    - name: Patch emacs soruce
+      run: |
+        cd emacs-src && patch -p1 < ../patch/${{ inputs.patch }}
+      if: ${{ inputs.patch }}
 
     - name: Download builder image
       uses: actions/download-artifact@v4

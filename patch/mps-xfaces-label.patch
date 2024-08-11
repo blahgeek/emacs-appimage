@@ -1,0 +1,16 @@
+diff --git a/src/xfaces.c b/src/xfaces.c
+index 69d4070b603..221efec62e0 100644
+--- a/src/xfaces.c
++++ b/src/xfaces.c
+@@ -4638,10 +4638,10 @@ free_realized_face (struct frame *f, struct face *face)
+ 
+ #ifdef HAVE_X_WINDOWS
+     free_face:
+-#endif /* HAVE_X_WINDOWS */
+ #ifndef HAVE_MPS
+       xfree (face);
+ #endif
++#endif /* HAVE_X_WINDOWS */
+     }
+ }
+ 
