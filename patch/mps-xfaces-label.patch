@@ -1,16 +1,12 @@
 diff --git a/src/xfaces.c b/src/xfaces.c
-index 69d4070b603..221efec62e0 100644
+index 69d4070b603..e3b5e867462 100644
 --- a/src/xfaces.c
 +++ b/src/xfaces.c
-@@ -4638,10 +4638,10 @@ free_realized_face (struct frame *f, struct face *face)
- 
- #ifdef HAVE_X_WINDOWS
-     free_face:
--#endif /* HAVE_X_WINDOWS */
+@@ -4642,6 +4642,7 @@ free_realized_face (struct frame *f, struct face *face)
  #ifndef HAVE_MPS
        xfree (face);
  #endif
-+#endif /* HAVE_X_WINDOWS */
++      (void)0;  /* prevent the above label being the end of a compound statement */
      }
  }
  
