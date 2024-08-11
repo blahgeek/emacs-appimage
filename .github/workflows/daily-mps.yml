@@ -46,7 +46,6 @@ jobs:
     with:
       name: mps-${{ matrix.build_native_comp == 'no' && 'no_native_comp' || 'native_comp' }}
       branch: scratch/igc
-      patch: mps-xfaces-label.patch
       build_gui: ${{ matrix.build_gui }}
       build_native_comp: ${{ matrix.build_native_comp }}
       do_test: false
