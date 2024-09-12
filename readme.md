@@ -12,15 +12,12 @@ This repo builds Emacs as AppImages for x86-64 linux systems.
 
 ## Download
 
-- **Release (latest version 29.4)**
-  * [![release](https://github.com/blahgeek/emacs-appimage/actions/workflows/release.yml/badge.svg)](https://github.com/blahgeek/emacs-appimage/actions/workflows/release.yml)
-  * [All downloads](https://github.com/blahgeek/emacs-appimage/releases?q=Release&expanded=true)
+- **Release & pre-release**: latest version 30.0.91
+  * [![release](https://github.com/blahgeek/emacs-appimage/actions/workflows/release.yml/badge.svg)](https://github.com/blahgeek/emacs-appimage/releases?q=Release&expanded=true)
 - **Daily master build**
-  * [![daily-master](https://github.com/blahgeek/emacs-appimage/actions/workflows/daily-master.yml/badge.svg)](https://github.com/blahgeek/emacs-appimage/actions/workflows/daily-master.yml)
-  * [All downloads](https://github.com/blahgeek/emacs-appimage/releases?q=Daily+master+build&expanded=true)
-- **NEW! Daily mps build**: the experimental MPS GC feature from `scratch/igc` branch. This version does not supports pgtk yet.
-  * [![daily-mps](https://github.com/blahgeek/emacs-appimage/actions/workflows/daily-mps.yml/badge.svg)](https://github.com/blahgeek/emacs-appimage/actions/workflows/daily-mps.yml)
-  * [All downloads](https://github.com/blahgeek/emacs-appimage/releases?q=Daily+mps+build&expanded=true)
+  * [![daily-master](https://github.com/blahgeek/emacs-appimage/actions/workflows/daily-master.yml/badge.svg)](https://github.com/blahgeek/emacs-appimage/releases?q=Daily+master+build&expanded=true)
+- **NEW! Weekly mps build**: the experimental MPS GC feature from `scratch/igc` branch. This version does not supports pgtk yet.
+  * [![daily-mps](https://github.com/blahgeek/emacs-appimage/actions/workflows/daily-mps.yml/badge.svg)](https://github.com/blahgeek/emacs-appimage/releases?q=Daily+mps+build&expanded=true)
 
 ## Version string meanings
 
