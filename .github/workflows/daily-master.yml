@@ -42,7 +42,7 @@ jobs:
     uses: ./.github/workflows/_build-emacs.yml
     with:
       name: master
-      branch: scratch/igc
+      branch: dev-igc
       build_gui: ${{ matrix.build_gui }}
       build_native_comp: aot
       do_test: true
