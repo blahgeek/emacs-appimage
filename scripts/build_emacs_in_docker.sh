@@ -15,8 +15,9 @@ ARGS+=" --disable-locallisppath"
 ARGS+=" --with-native-compilation=${BUILD_NATIVE_COMP:-aot}"
 ARGS+=" --with-json --with-threads --with-sqlite3 --with-tree-sitter"
 ARGS+=" --with-dbus --with-xml2 --with-modules --with-libgmp --with-gpm --with-lcms2"
-# always add mps. it will be ignored in master branch.
-ARGS+=" --with-mps"
+# # always add mps. it will be ignored in master branch.
+# ARGS+=" --with-mps"
+ARGS+=" --without-mps"
 
 if [ "$BUILD_GUI" = "pgtk" ]; then
     ARGS+=" --with-pgtk --without-x --without-gconf --without-ns"
