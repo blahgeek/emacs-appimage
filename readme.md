@@ -47,3 +47,10 @@ Tested in:
 
 - Ubuntu 20.04
 - Fedora 39
+
+## Troubleshooting
+
+### Spacemacs reports error like "Lisp directory /tmp/.mount_emacsxxxxx/share/emacs/29.4/etc/: no such directory"
+
+On each execution, Emacs.AppImage mounts itself in a unique temporary directory (/tmp/.mount_emacsxxxxx) and sets environment variables like `EMACSDATA` so that emacs can find data files correctly.
+Apparently, Spacemacs would cache environment variables in `.spacemacs.env`, which would break Emacs.AppImage. To fix this, delete related entires in `.spacemacs.env` and restart.
