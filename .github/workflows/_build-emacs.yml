@@ -39,7 +39,7 @@ jobs:
     - name: Download emacs source from repo
       uses: actions/checkout@v4
       with:
-        repository: "emacs-mirror/emacs"
+        repository: "blahgeek/emacs"
         ref: ${{ inputs.branch }}
         path: emacs-src
 
