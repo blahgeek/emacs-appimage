@@ -7,7 +7,7 @@ VERSION=$(readlink "$APPIMAGE_ROOT/bin/emacs" | sed -e 's/emacs-//')
 export EMACSLOADPATH="$APPIMAGE_ROOT/share/emacs/$VERSION/lisp"
 export EMACSDATA="$APPIMAGE_ROOT/share/emacs/$VERSION/etc"
 export EMACSDOC="$APPIMAGE_ROOT/share/emacs/$VERSION/etc"
-export EMACSPATH="$APPIMAGE_ROOT/libexec/emacs/$VERSION/x86_64-pc-linux-gnu"
+export EMACSPATH="$APPIMAGE_ROOT/libexec/emacs/$VERSION/$(uname -m)-pc-linux-gnu"
 export PATH="$APPIMAGE_ROOT/bin:$PATH"
 
 # check --emacs-appimage-run-as argument

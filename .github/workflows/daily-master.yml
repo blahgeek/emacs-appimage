@@ -16,6 +16,13 @@ jobs:
 
   prepare-docker:
     uses: ./.github/workflows/_prepare-docker.yml
+    with:
+      arch: ${{ matrix.arch }}
+    strategy:
+      matrix:
+        arch:
+          - x86_64
+          - aarch64
 
   setup-vars:
     runs-on: ubuntu-latest
@@ -38,14 +45,18 @@ jobs:
           - x11
           - pgtk
           - nox
+        arch:
+          - x86_64
+          - aarch64
 
     uses: ./.github/workflows/_build-emacs.yml
     with:
       name: master
+      arch: ${{ matrix.arch }}
       branch: master
       build_gui: ${{ matrix.build_gui }}
       build_native_comp: aot
-      do_test: true
+      do_test: ${{ matrix.arch == 'x86_64' }}
       do_release: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
       release_name: Daily master build ${{ needs.setup-vars.outputs.datetimestr }}
       release_latest: false

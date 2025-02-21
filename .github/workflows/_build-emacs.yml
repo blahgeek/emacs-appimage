@@ -7,6 +7,9 @@ on:
       branch:
         required: true
         type: string
+      arch:
+        required: true
+        type: string
       patch:
         type: string
       build_gui:
@@ -27,9 +30,14 @@ on:
 jobs:
 
   build-emacs:
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.arch == 'aarch64' && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
 
     steps:
+    - name: Confirm arch
+      run: |
+        echo $(uname -m)
+        test $(uname -m) = ${{ inputs.arch }}
+
     - name: Install fuse
       run: sudo apt-get install -y fuse libfuse2
 
@@ -51,12 +59,12 @@ jobs:
     - name: Download builder image
       uses: actions/download-artifact@v4
       with:
-        name: builder-image
+        name: ${{ inputs.arch }}-builder-image
         path: /tmp
 
     - name: Load builder image
       run: |
-        docker load -i /tmp/builder-image.tar
+        docker load -i /tmp/${{ inputs.arch }}-builder-image.tar
         docker image ls -a
 
     - name: Download tester ubuntu2004 image
@@ -98,7 +106,7 @@ jobs:
     - name: Upload binary as artifact
       uses: actions/upload-artifact@v4
       with:
-        name: Emacs-${{ inputs.name }}-${{ inputs.build_gui }}.AppImage
+        name: Emacs-${{ inputs.name }}-${{ inputs.build_gui }}-${{ inputs.arch }}.AppImage
         path: dist/Emacs.AppImage
         compression-level: 0
 
@@ -108,7 +116,7 @@ jobs:
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: dist/Emacs.AppImage
-        asset_name: Emacs-${{ inputs.name }}-${{ inputs.build_gui }}.AppImage
+        asset_name: Emacs-${{ inputs.name }}-${{ inputs.build_gui }}-${{ inputs.arch }}.AppImage
         tag: github-action-build-${{ github.run_id }}
         release_name: ${{ inputs.release_name }}
         prerelease: ${{ !inputs.release_latest }}

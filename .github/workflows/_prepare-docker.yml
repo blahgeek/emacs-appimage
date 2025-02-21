@@ -1,9 +1,13 @@
 on:
   workflow_call:
+    inputs:
+      arch:
+        required: true
+        type: string
 
 jobs:
   prepare-builder-docker:
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.arch == 'aarch64' && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
 
     steps:
     - name: Checkout
@@ -19,17 +23,18 @@ jobs:
         cache-from: type=gha
         cache-to: type=gha,mode=max
         tags: builder-image:latest
-        outputs: type=docker,dest=/tmp/builder-image.tar
+        outputs: type=docker,dest=/tmp/${{ inputs.arch }}-builder-image.tar
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: builder-image
-        path: /tmp/builder-image.tar
+        name: ${{ inputs.arch }}-builder-image
+        path: /tmp/${{ inputs.arch }}-builder-image.tar
         compression-level: 0
 
   prepare-tester-docker-ubuntu2004:
-    runs-on: ubuntu-latest
+    if: ${{ inputs.arch == 'x86_64' }}
+    runs-on: 'ubuntu-latest'
 
     steps:
     - name: Checkout
@@ -55,6 +60,7 @@ jobs:
         compression-level: 0
 
   prepare-tester-docker-archlinux:
+    if: ${{ inputs.arch == 'x86_64' }}
     runs-on: ubuntu-latest
 
     steps:
