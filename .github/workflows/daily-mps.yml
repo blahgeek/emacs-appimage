@@ -16,6 +16,13 @@ jobs:
 
   prepare-docker:
     uses: ./.github/workflows/_prepare-docker.yml
+    with:
+      arch: ${{ matrix.arch }}
+    strategy:
+      matrix:
+        arch:
+          - x86_64
+          - aarch64
 
   setup-vars:
     runs-on: ubuntu-latest
@@ -41,10 +48,14 @@ jobs:
         build_native_comp:
           - "no"
           - "aot"
+        arch:
+          - x86_64
+          - aarch64
 
     uses: ./.github/workflows/_build-emacs.yml
     with:
       name: mps-${{ matrix.build_native_comp == 'no' && 'no_native_comp' || 'native_comp' }}
+      arch: ${{ matrix.arch }}
       branch: feature/igc
       build_gui: ${{ matrix.build_gui }}
       build_native_comp: ${{ matrix.build_native_comp }}

@@ -23,9 +23,10 @@ docker run \
 docker cp $CONTAINER_ID:/work/dist ./dist
 
 # download appimagetool-x86_64.AppImage if not exists
-if [ ! -f ./appimagetool-x86_64.AppImage ]; then
-    wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
-    chmod +x ./appimagetool-x86_64.AppImage
+if [ ! -f ./appimagetool.AppImage ]; then
+    wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-$(uname -m).AppImage \
+         -O ./appimagetool.AppImage
+    chmod +x ./appimagetool.AppImage
 fi
 
-ARCH=x86_64 ./appimagetool-x86_64.AppImage --no-appstream ./dist/AppDir ./dist/Emacs.AppImage
+ARCH=$(uname -m) ./appimagetool.AppImage --no-appstream ./dist/AppDir ./dist/Emacs.AppImage
