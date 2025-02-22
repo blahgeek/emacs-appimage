@@ -29,4 +29,4 @@ if [ ! -f ./appimagetool.AppImage ]; then
     chmod +x ./appimagetool.AppImage
 fi
 
-ARCH=x86_64 ./appimagetool.AppImage --no-appstream ./dist/AppDir ./dist/Emacs.AppImage
+ARCH=$(uname -m) ./appimagetool.AppImage --no-appstream ./dist/AppDir ./dist/Emacs.AppImage
