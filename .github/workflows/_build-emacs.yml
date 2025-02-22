@@ -71,21 +71,21 @@ jobs:
       if: ${{ inputs.do_test }}
       uses: actions/download-artifact@v4
       with:
-        name: tester-image_ubuntu2004
+        name: ${{ inputs.arch }}-tester-image_ubuntu2004
         path: /tmp
 
     - name: Download tester archlinux image
       if: ${{ inputs.do_test }}
       uses: actions/download-artifact@v4
       with:
-        name: tester-image_archlinux
+        name: ${{ inputs.arch }}-tester-image_archlinux
         path: /tmp
 
     - name: Load tester image
       if: ${{ inputs.do_test }}
       run: |
-        docker load -i /tmp/tester-image_ubuntu2004.tar
-        docker load -i /tmp/tester-image_archlinux.tar
+        docker load -i /tmp/${{ inputs.arch }}-tester-image_ubuntu2004.tar
+        docker load -i /tmp/${{ inputs.arch }}-tester-image_archlinux.tar
         docker image ls -a
 
     - name: Build and package

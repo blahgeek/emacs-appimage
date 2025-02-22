@@ -50,13 +50,13 @@ jobs:
         # cache-from: type=gha
         # cache-to: type=gha,mode=max
         tags: tester-image_ubuntu2004:latest
-        outputs: type=docker,dest=/tmp/tester-image_ubuntu2004.tar
+        outputs: type=docker,dest=/tmp/${{ inputs.arch }}-tester-image_ubuntu2004.tar
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: tester-image_ubuntu2004
-        path: /tmp/tester-image_ubuntu2004.tar
+        name: ${{ inputs.arch }}-tester-image_ubuntu2004
+        path: /tmp/${{ inputs.arch }}-tester-image_ubuntu2004.tar
         compression-level: 0
 
   prepare-tester-docker-archlinux:
@@ -77,11 +77,11 @@ jobs:
         # cache-from: type=gha
         # cache-to: type=gha,mode=max
         tags: tester-image_archlinux:latest
-        outputs: type=docker,dest=/tmp/tester-image_archlinux.tar
+        outputs: type=docker,dest=/tmp/${{ inputs.arch }}-tester-image_archlinux.tar
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: tester-image_archlinux
-        path: /tmp/tester-image_archlinux.tar
+        name: ${{ inputs.arch }}-tester-image_archlinux
+        path: /tmp/${{ inputs.arch }}-tester-image_archlinux.tar
         compression-level: 0
