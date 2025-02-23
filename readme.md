@@ -1,7 +1,15 @@
 # Emacs AppImage
 
+![](https://img.shields.io/github/downloads/blahgeek/emacs-appimage/total)
+
+| Build type | Latest version (click to download) | Status | Notes |
+|-----|---|---|---|
+| **Release & pre-release** | [![](https://img.shields.io/github/v/release/blahgeek/emacs-appimage?sort=semver&filter=Release*&display_name=release&label=%20)](https://github.com/blahgeek/emacs-appimage/releases?q=Release&expanded=true) | [![](https://github.com/blahgeek/emacs-appimage/actions/workflows/release.yml/badge.svg)](https://github.com/blahgeek/emacs-appimage/releases?q=Release&expanded=true) | |
+| **Daily master** | [![](https://img.shields.io/github/v/release/blahgeek/emacs-appimage?include_prereleases&sort=date&filter=Daily%20master%20build*&display_name=release&label=%20)](https://github.com/blahgeek/emacs-appimage/releases?q=Daily+master+build&expanded=true) | [![](https://github.com/blahgeek/emacs-appimage/actions/workflows/daily-master.yml/badge.svg)](https://github.com/blahgeek/emacs-appimage/releases?q=Daily+master+build&expanded=true) | |
+| **Weekly mps build** | [![](https://img.shields.io/github/v/release/blahgeek/emacs-appimage?include_prereleases&sort=date&filter=*mps%20build*&display_name=release&label=%20)](https://github.com/blahgeek/emacs-appimage/releases?q=Daily+mps+build&expanded=true) | [![](https://github.com/blahgeek/emacs-appimage/actions/workflows/daily-mps.yml/badge.svg)](https://github.com/blahgeek/emacs-appimage/releases?q=Daily+mps+build&expanded=true) | the experimental MPS GC feature from `feature/igc` branch. does not supports pgtk yet |
+
 [AppImage](https://appimage.org/) is a single-file executable format for linux.
-This repo builds Emacs as AppImages for x86-64 linux systems.
+This repo builds Emacs as AppImages for x86-64 & aarch64 linux systems.
 
 ## Highlights
 
@@ -9,15 +17,6 @@ This repo builds Emacs as AppImages for x86-64 linux systems.
 - Self-contained, no extra dependencies
 - Automatically built on Github Actions
 - Provides both latest release and daily master builds
-
-## Download
-
-- **Release & pre-release**: latest version 30.1-rc1
-  * [![release](https://github.com/blahgeek/emacs-appimage/actions/workflows/release.yml/badge.svg)](https://github.com/blahgeek/emacs-appimage/releases?q=Release&expanded=true)
-- **Daily master build**
-  * [![daily-master](https://github.com/blahgeek/emacs-appimage/actions/workflows/daily-master.yml/badge.svg)](https://github.com/blahgeek/emacs-appimage/releases?q=Daily+master+build&expanded=true)
-- **NEW! Weekly mps build**: the experimental MPS GC feature from `feature/igc` branch. This version does not supports pgtk yet.
-  * [![daily-mps](https://github.com/blahgeek/emacs-appimage/actions/workflows/daily-mps.yml/badge.svg)](https://github.com/blahgeek/emacs-appimage/releases?q=Daily+mps+build&expanded=true)
 
 ## Version string meanings
 
