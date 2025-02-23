@@ -39,7 +39,6 @@ jobs:
         compression-level: 0
 
   prepare-tester-docker-ubuntu2004:
-    if: ${{ inputs.arch == 'x86_64' }}
     runs-on: 'ubuntu-latest'
 
     steps:
@@ -66,7 +65,6 @@ jobs:
         compression-level: 0
 
   prepare-tester-docker-archlinux:
-    if: ${{ inputs.arch == 'x86_64' }}
     runs-on: ubuntu-latest
 
     steps:
