@@ -15,6 +15,14 @@ jobs:
 
   prepare-docker:
     uses: ./.github/workflows/_prepare-docker.yml
+    with:
+      arch: ${{ matrix.arch }}
+    secrets: inherit
+    strategy:
+      matrix:
+        arch:
+          - x86_64
+          - aarch64
 
   build-emacs:
     needs:
@@ -26,14 +34,18 @@ jobs:
           - x11
           - pgtk
           - nox
+        arch:
+          - x86_64
+          - aarch64
 
     uses: ./.github/workflows/_build-emacs.yml
     with:
       name: ${{ inputs.version }}
+      arch: ${{ matrix.arch }}
       branch: emacs-${{ inputs.version }}
       build_gui: ${{ matrix.build_gui }}
       build_native_comp: aot
-      do_test: true
+      do_test: ${{ matrix.arch == 'x86_64' }}
       do_release: true
       release_name: Release ${{ inputs.version }}
       release_latest: true
