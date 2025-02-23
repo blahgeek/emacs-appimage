@@ -57,7 +57,7 @@ jobs:
       branch: master
       build_gui: ${{ matrix.build_gui }}
       build_native_comp: aot
-      do_test: ${{ matrix.arch == 'x86_64' }}
+      do_test: true
       do_release: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
       release_name: Daily master build ${{ needs.setup-vars.outputs.datetimestr }}
       release_latest: false

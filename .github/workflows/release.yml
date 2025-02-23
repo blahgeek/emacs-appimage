@@ -45,7 +45,7 @@ jobs:
       branch: emacs-${{ inputs.version }}
       build_gui: ${{ matrix.build_gui }}
       build_native_comp: aot
-      do_test: ${{ matrix.arch == 'x86_64' }}
+      do_test: true
       do_release: true
       release_name: Release ${{ inputs.version }}
       release_latest: true
