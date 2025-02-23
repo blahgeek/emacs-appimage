@@ -46,9 +46,6 @@ jobs:
         build_gui:
           - x11
           - nox
-        build_native_comp:
-          - "no"
-          - "aot"
         arch:
           - x86_64
           - aarch64
