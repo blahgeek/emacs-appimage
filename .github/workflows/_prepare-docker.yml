@@ -39,7 +39,7 @@ jobs:
         compression-level: 0
 
   prepare-tester-docker-ubuntu2004:
-    runs-on: 'ubuntu-latest'
+    runs-on: ${{ inputs.arch == 'aarch64' && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
 
     steps:
     - name: Checkout
@@ -65,7 +65,7 @@ jobs:
         compression-level: 0
 
   prepare-tester-docker-archlinux:
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.arch == 'aarch64' && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
 
     steps:
     - name: Checkout
