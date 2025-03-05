@@ -52,7 +52,8 @@ jobs:
     - name: Build and export
       uses: docker/build-push-action@v5
       with:
-        file: tests/Dockerfile.ubuntu2004
+        context: tests/
+        file: Dockerfile.ubuntu2004
         # cache-from: type=gha
         # cache-to: type=gha,mode=max
         tags: tester-image_ubuntu2004:latest
@@ -79,7 +80,8 @@ jobs:
     - name: Build and export
       uses: docker/build-push-action@v5
       with:
-        file: tests/Dockerfile.archlinux
+        context: tests/
+        file: Dockerfile.archlinux
         # cache-from: type=gha
         # cache-to: type=gha,mode=max
         tags: tester-image_archlinux:latest

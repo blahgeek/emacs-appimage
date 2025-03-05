@@ -3,3 +3,5 @@ FROM archlinux:latest
 RUN pacman-key --init \
     && pacman -Syu --noconfirm \
     && pacman -S --noconfirm xfce4
+
+ADD scripts /scripts

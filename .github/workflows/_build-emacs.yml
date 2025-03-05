@@ -94,13 +94,13 @@ jobs:
     - name: Test in ubuntu 20.04 container
       if: ${{ inputs.do_test }}
       run: |
-        docker run -v ./dist:/dist -v ./scripts:/scripts tester-image_ubuntu2004:latest \
+        docker run -v ./dist:/dist tester-image_ubuntu2004:latest \
           /scripts/test_emacs_in_docker.sh /dist/Emacs.AppImage
 
     - name: Test in archlinux container
       if: ${{ inputs.do_test }}
       run: |
-        docker run -v ./dist:/dist -v ./scripts:/scripts tester-image_archlinux:latest \
+        docker run -v ./dist:/dist tester-image_archlinux:latest \
           /scripts/test_emacs_in_docker.sh /dist/Emacs.AppImage
 
     - name: Upload binary as artifact

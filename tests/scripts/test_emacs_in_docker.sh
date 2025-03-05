@@ -1,5 +1,6 @@
 #!/bin/bash -ex
 
+SCRIPTS_DIR="$(realpath "$(dirname "$0")")"
 EMACS_APPIMAGE="$(realpath "$1")"
 
 cd "$(mktemp -d)"
@@ -7,11 +8,7 @@ cd "$(mktemp -d)"
 cp "$EMACS_APPIMAGE" ./Emacs.AppImage
 chmod +x ./Emacs.AppImage
 
-cat <<-EOF > test.el
-(native-compile '(lambda (x) (* x 2)))
-(message "hello world!")
-EOF
-
 ./Emacs.AppImage --appimage-extract
 cd squashfs-root
-./AppRun --batch -l ../test.el
+
+./AppRun --batch -l "$SCRIPTS_DIR/test.el"
