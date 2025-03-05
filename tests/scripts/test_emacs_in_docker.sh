@@ -12,3 +12,4 @@ chmod +x ./Emacs.AppImage
 cd squashfs-root
 
 ./AppRun --batch -l "$SCRIPTS_DIR/test.el"
+[[ "$(./AppRun --emacs-appimage-run-as emacsclient --version)" =~ emacsclient* ]]
