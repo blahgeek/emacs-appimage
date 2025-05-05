@@ -84,6 +84,10 @@ LIB_WHITELIST = [
     # 'libdatrie',  # thai
 
     # 'libpng16',  # depend by emacs. but should be present in users' system by gtk, so do not include
+
+    'libxml2',  # depend by emacs. libxml 2.14+ uses a different soname
+    'libicuuc',  # depend by libxml2
+    'libicudata',  # depend by libicuuc
 ]
 
 ldd_output = subprocess.check_output(['ldd', str(APPDIR / 'bin/emacs')], universal_newlines=True)
