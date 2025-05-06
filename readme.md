@@ -20,7 +20,8 @@ This repo builds Emacs as AppImages for x86-64 & aarch64 linux systems.
 
 ## Version string meanings
 
-- `x11`: built with X11 GUI support
+- `gtk3` (or `x11` in legacy builds): built with X11 GTK3 toolkit
+- `lucid`: built with X11 lucid toolkit
 - `pgtk`: built with PGTK GUI support, for wayland desktop
 - `nox`: built without GUI support
 

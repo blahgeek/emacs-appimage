@@ -18,11 +18,18 @@ ARGS+=" --with-dbus --with-xml2 --with-modules --with-libgmp --with-gpm --with-l
 # always add mps. it will be ignored in master branch.
 ARGS+=" --with-mps"
 
-if [ "$BUILD_GUI" = "pgtk" ]; then
+IS_GUI=no
+
+if [[ "$BUILD_GUI" = "pgtk" ]]; then
+    IS_GUI=yes
     ARGS+=" --with-pgtk --without-x --without-gconf --without-ns"
-elif [ "$BUILD_GUI" = "x11" ]; then
+elif [[ "$BUILD_GUI" = "x11" || "$BUILD_GUI" = "gtk3" ]]; then
+    IS_GUI=yes
     ARGS+=" --with-x --without-pgtk --without-gconf --with-x-toolkit=gtk3"
     ARGS+=" --with-xft"
+elif [[ "$BUILD_GUI" = "lucid" ]]; then
+    IS_GUI=yes
+    ARGS+=" --with-x --without-pgtk --without-gconf --with-x-toolkit=lucid"
 else
     ARGS+=" --without-x --without-pgtk --without-ns"
 fi
@@ -33,7 +40,7 @@ fi
 # TODO: imagemagick requires dynamic coders. we don't support them correctly now (so it cannot work correctly)
 # so disable imagemagick for now
 ARGS+=" --without-tiff --without-imagemagick"
-if [ "$BUILD_GUI" != "no" ]; then
+if [[ "$IS_GUI" = "yes" ]]; then
     ARGS+=" --with-gif --with-png --with-rsvg --with-webp"
     ARGS+=" --with-harfbuzz --with-cairo --with-libotf --without-m17n-flt"
     # use static lib for libjpeg, to prevent incompatible libjpeg.so version because it's depend by gtk

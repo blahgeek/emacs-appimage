@@ -44,7 +44,7 @@ jobs:
       fail-fast: false
       matrix:
         build_gui:
-          - x11
+          - gtk3
           - nox
         arch:
           - x86_64

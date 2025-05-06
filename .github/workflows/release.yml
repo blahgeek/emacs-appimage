@@ -31,7 +31,8 @@ jobs:
     strategy:
       matrix:
         build_gui:
-          - x11
+          - gtk3
+          - lucid
           - pgtk
           - nox
         arch:
