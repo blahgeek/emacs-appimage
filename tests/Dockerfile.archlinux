@@ -2,8 +2,8 @@ FROM archlinux:latest
 
 RUN pacman-key --init \
     && pacman -Syu --noconfirm \
-    && pacman -S --noconfirm xfce4 libxpm
+    && pacman -S --noconfirm xfce4 libxaw
 
-# libXmp is required by lucid build
+# libxaw is required by lucid build
 
 ADD scripts /scripts
