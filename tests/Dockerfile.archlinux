@@ -2,6 +2,8 @@ FROM archlinux:latest
 
 RUN pacman-key --init \
     && pacman -Syu --noconfirm \
-    && pacman -S --noconfirm xfce4
+    && pacman -S --noconfirm xfce4 libxaw
+
+# libxaw is required by lucid build
 
 ADD scripts /scripts
