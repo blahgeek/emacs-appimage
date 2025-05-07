@@ -1,6 +1,13 @@
 #!/bin/bash
 
-APPIMAGE_ROOT="$(dirname "$(readlink -f "$0")")"
+# https://docs.appimage.org/packaging-guide/environment-variables.html#id2
+
+APPIMAGE_ROOT="$APPDIR"
+
+unset APPDIR
+unset APPIMAGE
+unset OWD
+unset ARGV0
 
 VERSION=$(readlink "$APPIMAGE_ROOT/bin/emacs" | sed -e 's/emacs-//')
 
