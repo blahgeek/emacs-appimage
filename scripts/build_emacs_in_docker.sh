@@ -26,7 +26,6 @@ if [[ "$BUILD_GUI" = "pgtk" ]]; then
 elif [[ "$BUILD_GUI" = "x11" || "$BUILD_GUI" = "gtk3" ]]; then
     IS_GUI=yes
     ARGS+=" --with-x --without-pgtk --without-gconf --with-x-toolkit=gtk3"
-    ARGS+=" --with-xft"
 elif [[ "$BUILD_GUI" = "lucid" ]]; then
     IS_GUI=yes
     ARGS+=" --with-x --without-pgtk --without-gconf --with-x-toolkit=lucid"
