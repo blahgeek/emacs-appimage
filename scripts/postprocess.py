@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import typing as tp
 import glob
 import shutil
 import logging
@@ -19,6 +20,13 @@ def _glob_one(p):
     assert len(res) == 1, f'Cannot find exactly one {p}'
     logging.info(f'Glob {p} -> {res[0]}')
     return Path(res[0])
+
+def _is_relative_to(a, b):
+    try:
+        a.relative_to(b)
+        return True
+    except ValueError:
+        return False
 
 emacs_version = str(_glob_one(APPDIR / 'bin/emacs-*')).split('-')[-1]
 logging.info(f'Emacs version: {emacs_version}')
@@ -56,56 +64,131 @@ for n in ['crtn.o', 'crti.o']:
 shutil.copy2(_glob_one('/lib/*/libc.so.6'), gccjit_lib_path / 'libc.so.6')
 os.symlink('libc.so.6', str(gccjit_lib_path / 'libc.so'))
 
-# copy libraries
-LIB_WHITELIST = [
-    'libMagickCore-6.Q16',  # depend by emacs
-    'libMagickWand-6.Q16',  # depend by emacs
-    'libbz2',  # depend by MagickCore
-    'libfftw3',  # depend by MagickCore
-    'libgomp',  # depend by MagickWand
-    'liblcms2',  # depend by emacs, MagickWand, MagickCore
-    'liblqr-1',  # depend by MagickWand, MagickCore
-    'libltdl',  # depend by MagickCore
+# ---
+# process dynamic libs
+# ---
+class NeededLib:
 
-    'librsvg-2',  # depend by emacs
-    'libcroco-0.6',  # depend by rsvg
+    def __init__(self, name: str, resolved_path: Path):
+        self.name = name
+        self.resolved_path = resolved_path
+        self.needed_libs = []
 
-    'libgif',  # depend by emacs
-    'libjansson',  # depend by emacs
-    'libotf',  # depend by emacs
-    'libsqlite3',  # depend by emacs
-    'libtinfo',  # depend by emacs
-    'libwebpdemux',  # depend by emacs
-    'libwebp',  # depend by emacs
+    def _collect(self, result):
+        for l in self.needed_libs:
+            result[l.name] = l.resolved_path
+            l._collect(result)
 
-    'libmpc',  # depend by libgccjit
-    'libmpfr',  # depend by libgccjit
+    def collect(self) -> tp.Dict[str, Path]:
+        '''
+        Collect all nodes in current tree (except self).
+        '''
+        result = {}
+        self._collect(result)
+        return result
 
-    # 'libdatrie',  # thai
+    def _trim(self, name_prefix, trimmed_names: tp.Set[str]):
+        kept_libs = []
+        for x in self.needed_libs:
+            if not x.name.startswith(name_prefix):
+                kept_libs.append(x)
+            else:
+                trimmed_names.add(x.name)
+                trimmed_names.update(x.collect().keys())
+        self.needed_libs = kept_libs
+        for x in self.needed_libs:
+            x._trim(name_prefix, trimmed_names)
 
-    # 'libpng16',  # depend by emacs. but should be present in users' system by gtk, so do not include
+    def trim(self, name_prefix) -> tp.Set[str]:
+        '''
+        Delete node whose name starts with name_prefix, along with all their children.
+        '''
+        trimmed_names = set()
+        self._trim(name_prefix, trimmed_names)
+        return trimmed_names
 
-    'libxml2',  # depend by emacs. libxml 2.14+ uses a different soname
-    'libicuuc',  # depend by libxml2
-    'libicudata',  # depend by libicuuc
+def _leading_space_count(s) -> int:
+    n = 0
+    while n < len(s) and s[n] == ' ':
+        n = n + 1
+    return n
+
+def _parse_lddtree(lddtree_output: str) -> NeededLib:
+    lines = lddtree_output.rstrip().splitlines()
+    assert not lines[0].startswith(' ')
+    line_i = 1
+
+    def _parse_node(node, expected_level):
+        nonlocal line_i
+        while line_i < len(lines):
+            line = lines[line_i]
+            level = _leading_space_count(line) // 4
+
+            if level > expected_level:
+                assert level == expected_level + 1
+                assert len(node.needed_libs) > 0
+                _parse_node(node.needed_libs[-1], expected_level + 1)
+                continue
+
+            if level < expected_level:
+                return
+
+            parts = line.strip().split(' => ')
+            assert len(parts) == 2
+            node.needed_libs.append(
+                NeededLib(name=parts[0], resolved_path=Path(parts[1]))
+            )
+            line_i = line_i + 1
+
+    root = NeededLib(name='', resolved_path=Path())
+    _parse_node(root, 1)
+    return root
+
+
+lddtree_output = subprocess.check_output(
+    ['lddtree', '-a', str(APPDIR / 'bin/emacs')],
+    universal_newlines=True,
+)
+lddtree = _parse_lddtree(lddtree_output)
+
+
+# this is prefix
+LIB_BLACKLIST = [
+    # GTK related
+    'libgtk-3.so',
+    'libgdk-3.so',
+    'libgdk_pixbuf-2.0.so',
+    'libgio-2.0.so',
+    'libgobject-2.0.so',
+    'libglib-2.0.so',
+    # X related
+    'libX',  # prefix
+    'libxcb.so',
+    'libxcb-shape.so',
+    'libSM.so',
+    'libICE.so',
+    # GUI base system
+    'libpango-1.0.so',
+    'libcairo.so',
+    'libfreetype.so',
+    'libfontconfig.so',
+    'libharfbuzz.so',
+    # base system
+    'libgcc_s.so',
 ]
 
-ldd_output = subprocess.check_output(['ldd', str(APPDIR / 'bin/emacs')], universal_newlines=True)
-for line in ldd_output.splitlines():
-    if '=>' not in line or 'not found' in line:
-        logging.warning(f'Unexpected ldd output: {line}')
+# Remove lib from blacklist
+# also, remove all its children
+for name in LIB_BLACKLIST:
+    trimmed_names = lddtree.trim(name)
+    for trimmed_name in trimmed_names:
+        logging.warning(f'Removed lib {trimmed_name}')
+        lddtree.trim(trimmed_name)
+
+for name, libpath in lddtree.collect().items():
+    if _is_relative_to(libpath.resolve(), APPDIR):  # e.g. libgccjit
         continue
-    libpath = Path(line.split()[2])
-    if not libpath.exists():
-        logging.warning(f'Skipping non-exist library {libpath}')
-        continue
-    if libpath.parent.resolve() == (APPDIR / 'lib'):
-        continue
-    libname = libpath.name.split('.so')[0]
-    if libname not in LIB_WHITELIST:
-        logging.info(f'Skipping non-whitelisted library {libpath}')
-        continue
-    logging.info(f'Copying {libpath}')
+    logging.info(f'Copying {name} ({libpath})')
     dst_path = APPDIR / 'lib' / libpath.name
     shutil.copy2(libpath, dst_path)
 
