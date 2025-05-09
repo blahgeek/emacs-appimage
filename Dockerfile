@@ -50,7 +50,7 @@ RUN wget -O mps-release-1.118.0.tar.gz https://github.com/Ravenbrook/mps/archive
     cd .. && rm -rf mps-release-1.118.0 mps-release-1.118.0.tar.gz
 
 RUN apt-get update && apt-get install -y \
-    xorg libx11-dev libgtk-3-dev libxaw7-dev \
+    xorg libx11-dev libgtk-3-dev libxaw7-dev libwebkit2gtk-4.0-dev \
     libjpeg-dev libgif-dev libtiff-dev libxmp-dev \
     libsqlite3-dev libmagickcore-dev libmagickwand-dev \
     libwebp-dev libotf-dev libcairo-dev libjansson-dev \
