@@ -173,8 +173,18 @@ LIB_BLACKLIST = [
     'libfreetype.so',
     'libfontconfig.so',
     'libharfbuzz.so',
+    'libGL',
+    'libOpenGL',
+    'libEGL',
     # base system
     'libgcc_s.so',
+    'libpthread.so',
+    'librt.so',
+    'libc.so',
+    'libdl.so',
+    'libresolv.so',
+    'libz.so',
+    'libm.so',
 ]
 
 # Remove lib from blacklist
