@@ -180,6 +180,7 @@ LIB_BLACKLIST = [
     # base system
     'libgcc_s.so',
     'libgnutls.so',
+    'libstdc++.so.6',
     # glibc
     'libpthread.so',
     'librt.so',
