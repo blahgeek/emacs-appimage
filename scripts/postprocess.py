@@ -178,13 +178,18 @@ LIB_BLACKLIST = [
     'libEGL',
     # base system
     'libgcc_s.so',
+    # glibc
     'libpthread.so',
     'librt.so',
     'libc.so',
+    'libc_',
     'libdl.so',
     'libresolv.so',
     'libz.so',
     'libm.so',
+    'libanl.so',
+    'libnss_',
+    'libutil.so',
 ]
 
 # Remove lib from blacklist
