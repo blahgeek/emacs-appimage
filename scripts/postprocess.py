@@ -168,7 +168,7 @@ LIB_BLACKLIST = [
     'libSM.so',
     'libICE.so',
     # GUI base system
-    'libpango-1.0.so',
+    'libpango',
     'libcairo.so',
     'libfreetype.so',
     'libfontconfig.so',
@@ -176,6 +176,7 @@ LIB_BLACKLIST = [
     'libGL',
     'libOpenGL',
     'libEGL',
+    'libdbus-1.so',
     # base system
     'libgcc_s.so',
     # glibc
