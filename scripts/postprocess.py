@@ -179,6 +179,7 @@ LIB_BLACKLIST = [
     'libdbus-1.so',
     # base system
     'libgcc_s.so',
+    'libgnutls.so',
     # glibc
     'libpthread.so',
     'librt.so',
