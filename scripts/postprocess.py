@@ -177,6 +177,7 @@ LIB_BLACKLIST = [
     'libOpenGL',
     'libEGL',
     'libdbus-1.so',
+    'librsvg',   # dynamic loaded by gdk
     # base system
     'libgcc_s.so',
     'libgnutls.so',
