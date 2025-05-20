@@ -24,7 +24,7 @@ docker cp $CONTAINER_ID:/work/dist ./dist
 
 # download appimagetool-x86_64.AppImage if not exists
 if [ ! -f ./appimagetool.AppImage ]; then
-    wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-$(uname -m).AppImage \
+    wget https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-$(uname -m).AppImage \
          -O ./appimagetool.AppImage
     chmod +x ./appimagetool.AppImage
 fi
