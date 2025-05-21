@@ -48,7 +48,6 @@ if [[ "$IS_GUI" = "yes" ]]; then
     ARGS+=" --with-harfbuzz --with-cairo --with-libotf --without-m17n-flt"
 fi
 
-
 env \
     PATH=$DIST_APPDIR/bin:$PATH \
     LD_LIBRARY_PATH=$DIST_APPDIR/lib \
@@ -68,3 +67,8 @@ popd
 
 cp $SCRIPT_DIR/AppRun $DIST_APPDIR/AppRun
 python3 $SCRIPT_DIR/postprocess.py $DIST_APPDIR
+
+# https://github.com/AppImageCommunity/pkg2appimage/issues/83
+echo "extern int is_selinux_enabled(void){return 0;}" > /tmp/selinux-mock.c
+gcc-8 -s -shared -o /tmp/libselinux.so.1 -Wl,-soname,libselinux.so.1 /tmp/selinux-mock.c
+mv /tmp/libselinux.so.1 ${DIST_APPDIR}/lib/

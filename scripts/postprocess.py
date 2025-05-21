@@ -190,7 +190,7 @@ LIB_BLACKLIST = [
 for name in LIB_BLACKLIST:
     trimmed_names = lddtree.trim(name)
     for trimmed_name in trimmed_names:
-        logging.warning(f'Removed lib {trimmed_name}')
+        logging.warning(f'Removed lib {trimmed_name} (due to {name})')
         lddtree.trim(trimmed_name)
 
 for name, libpath in lddtree.collect().items():
