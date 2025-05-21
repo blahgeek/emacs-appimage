@@ -58,4 +58,13 @@ RUN apt-get update && apt-get install -y \
     git texinfo pax-utils && \
     rm -rf /var/lib/apt/lists/*
 
+# https://github.com/AppImageCommunity/pkg2appimage/issues/83
+# but single is_selinux_enabled function is not enough
+RUN wget -O libselinux-dummy.tar.gz https://github.com/blahgeek/libselinux-dummy/archive/refs/tags/20220102.tar.gz && \
+    tar xf libselinux-dummy.tar.gz && \
+    cd libselinux-dummy-20220102 && \
+    make && make install && \
+    ln -sf /lib/libselinux.so.1 /lib/$(uname -m)-linux-gnu/libselinux.so.1 && \
+    cd .. && rm -rf libselinux-dummy-20220102 libselinux-dummy.tar.gz
+
 ADD scripts /work/scripts
