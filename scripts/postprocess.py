@@ -167,7 +167,6 @@ LIB_BLACKLIST = [
     'libGL',
     'libOpenGL',
     'libEGL',
-    'libdbus-1.so',
     # base system
     'libgcc_s.so',
     'libstdc++.so.6',
