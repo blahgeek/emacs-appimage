@@ -154,13 +154,6 @@ lddtree = _parse_lddtree(lddtree_output)
 
 # this is prefix
 LIB_BLACKLIST = [
-    # GTK related
-    'libgtk-3.so',
-    'libgdk-3.so',
-    'libgdk_pixbuf-2.0.so',
-    'libgio-2.0.so',
-    'libgobject-2.0.so',
-    'libglib-2.0.so',
     # X related
     'libX',  # prefix
     'libxcb.so',
@@ -168,8 +161,6 @@ LIB_BLACKLIST = [
     'libSM.so',
     'libICE.so',
     # GUI base system
-    'libpango',
-    'libcairo.so',
     'libfreetype.so',
     'libfontconfig.so',
     'libharfbuzz.so',
@@ -177,10 +168,8 @@ LIB_BLACKLIST = [
     'libOpenGL',
     'libEGL',
     'libdbus-1.so',
-    'librsvg',   # dynamic loaded by gdk
     # base system
     'libgcc_s.so',
-    'libgnutls.so',
     'libstdc++.so.6',
     # glibc
     'libpthread.so',

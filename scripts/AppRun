@@ -15,6 +15,16 @@ export EMACSDATA="$APPIMAGE_ROOT/share/emacs/$VERSION/etc"
 export EMACSDOC="$APPIMAGE_ROOT/share/emacs/$VERSION/etc"
 export EMACSPATH="$(echo "$APPIMAGE_ROOT"/libexec/emacs/$VERSION/*)"
 export PATH="$APPIMAGE_ROOT/bin:$PATH"
+export XDG_DATA_DIRS="$APPIMAGE_ROOT/share:${XDG_DATA_DIRS}"
+
+if [ -d "$APPIMAGE_ROOT/lib/gtk-3.0" ]; then
+    export GSETTINGS_SCHEMA_DIR=${APPIMAGE_ROOT}/share/glib-2.0/schemas/:${GSETTINGS_SCHEMA_DIR}
+    export GDK_PIXBUF_MODULE_FILE=${APPIMAGE_ROOT}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
+    export GTK_PATH=${APPIMAGE_ROOT}/lib/gtk-3.0
+    export GIO_MODULE_DIR=${APPIMAGE_ROOT}/lib/gio
+    export GTK_DATA_PREFIX=${APPIMAGE_ROOT}
+    export GTK_THEME=Adwaita
+fi
 
 # check --emacs-appimage-run-as argument
 if [ "$1" = "--emacs-appimage-run-as" ]; then

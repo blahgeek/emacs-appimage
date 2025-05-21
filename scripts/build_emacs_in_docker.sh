@@ -4,6 +4,7 @@ SCRIPT_DIR=$(dirname "$(readlink -f "${0}")")
 
 cd "$WORK_DIR"
 
+rm -rf emacs
 cp -r emacs-src emacs
 
 pushd emacs
@@ -26,6 +27,12 @@ if [[ "$BUILD_GUI" = "pgtk" ]]; then
 elif [[ "$BUILD_GUI" = "x11" || "$BUILD_GUI" = "gtk3" ]]; then
     IS_GUI=yes
     ARGS+=" --with-x --without-pgtk --without-gconf --with-x-toolkit=gtk3"
+
+    # copy GTK related files
+    cp -r /usr/lib/$(uname -m)-linux-gnu/gdk-pixbuf-2.0 "$DIST_APPDIR/lib/"
+    cp -r /usr/lib/$(uname -m)-linux-gnu/gtk-3.0 "$DIST_APPDIR/lib/"
+    cp -r /usr/lib/$(uname -m)-linux-gnu/gio "$DIST_APPDIR/lib/"
+    cp -r /usr/share/glib-2.0 "$DIST_APPDIR/share/"
 elif [[ "$BUILD_GUI" = "lucid" ]]; then
     IS_GUI=yes
     ARGS+=" --with-x --without-pgtk --without-gconf --with-x-toolkit=lucid"
@@ -33,17 +40,12 @@ else
     ARGS+=" --without-x --without-pgtk --without-ns"
 fi
 
-# TODO: libtiff caused some trouble on compatibility:
-# it's depend by gtk (which we donot bundle) and have incompatible APIs between versions.
-# so disable libtiff for now
 # TODO: imagemagick requires dynamic coders. we don't support them correctly now (so it cannot work correctly)
 # so disable imagemagick for now
 ARGS+=" --without-tiff --without-imagemagick"
 if [[ "$IS_GUI" = "yes" ]]; then
-    ARGS+=" --with-gif --with-png --with-rsvg --with-webp"
+    ARGS+=" --with-gif --with-png --with-rsvg --with-webp --with-tiff --with-jpeg"
     ARGS+=" --with-harfbuzz --with-cairo --with-libotf --without-m17n-flt"
-    # use static lib for libjpeg, to prevent incompatible libjpeg.so version because it's depend by gtk
-    ARGS+=" --with-jpeg emacs_cv_jpeglib=/usr/lib/$(uname -m)-linux-gnu/libjpeg.a"
 fi
 
 
