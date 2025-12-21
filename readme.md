@@ -1,3 +1,7 @@
+
+> [!CAUTION]
+> Sorry I don't have time to maintain this repo for now, it's now archived.
+
 # Emacs AppImage
 
 ![](https://img.shields.io/github/downloads/blahgeek/emacs-appimage/total)
